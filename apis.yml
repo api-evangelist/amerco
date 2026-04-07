@@ -1,7 +1,10 @@
 aid: amerco
-url: https://raw.githubusercontent.com/api-evangelist/amerco/refs/heads/main/apis.yml
+url: 
+  https://raw.githubusercontent.com/api-evangelist/amerco/refs/heads/main/apis.yml
 modified: '2026-03-23'
 apis: []
 common:
   - type: Website
     url: https://www.amerco.com
+description: >-
+  U-Haul Holding Company.
