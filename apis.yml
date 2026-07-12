@@ -46,6 +46,10 @@ apis:
         url: https://www.uhaul.com/Dealer/
 
 common:
+  - type: DomainSecurity
+    url: security/amerco-domain-security.yml
+  - url: https://www.uhaul.com/Blog/feed/
+    type: Blog
   - type: Website
     url: https://www.amerco.com/
   - type: Website
