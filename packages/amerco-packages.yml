@@ -1,0 +1,50 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  registry.npmjs.org search, pypi.org, api.github.com/orgs/u-haul and
+  api.github.com/orgs/WebSelfStorage, https://api.webselfstorage.com/ and
+  https://www.webselfstorage.com/ — all queried 2026-09-02
+provider: AMERCO
+providerId: amerco
+description: >-
+  First-party client libraries for AMERCO (U-Haul Holding Company) APIs. None exist. AMERCO
+  publishes no SDK, no client package and no code sample for the WebSelfStorage Affiliate API
+  in any public registry, and both of its GitHub organizations are empty.
+package_count: 0
+official_package_count: 0
+packages: []
+
+registries_checked:
+- registry: npm
+  query: 'https://registry.npmjs.org/-/v1/search?text=webselfstorage'
+  result: 0 packages
+- registry: npm
+  query: 'https://registry.npmjs.org/-/v1/search?text=uhaul'
+  result: >-
+    2 packages, neither first-party — "uhaul" 1.0.0 (published 2019-10-14) and
+    "@striderlabs/mcp-uhaul" 1.0.0 (published 2026-03-17), both third-party. Not recorded as
+    packages here because official:true cannot be established for either.
+- registry: pypi
+  query: https://pypi.org/pypi/uhaul/json
+  result: 404 — no such project
+- registry: github
+  query: https://api.github.com/orgs/u-haul
+  result: >-
+    org exists ("U-Haul International, Inc.", created 2020-11-06) with public_repos: 0
+- registry: github
+  query: https://api.github.com/orgs/WebSelfStorage
+  result: 'org exists ("WebSelfStorage", created 2026-04-30) with public_repos: 0'
+- registry: docs
+  query: https://api.webselfstorage.com/
+  result: >-
+    Swagger UI only. No SDK links, no download, no code-generation instructions. The spec has
+    no operationIds, so even a generated client would produce machine-named methods.
+
+finding: >-
+  A consumer of the WebSelfStorage Affiliate API writes their own HTTP client. That is the
+  practical reason the integration market for this API is a handful of specialist web shops
+  rather than in-house teams: there is a contract, but no distributed code and no dated release
+  an integrator can pin to.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

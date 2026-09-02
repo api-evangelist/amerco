@@ -3,90 +3,60 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: AMERCO
 providerId: amerco
+generated: '2026-09-02'
+method: probed
+source: >-
+  openapi/amerco-webselfstorage-affiliate-api-v4-openapi.yml plus a live unauthenticated
+  GET https://api.webselfstorage.com/v4/test (HTTP 401) with full response headers read,
+  2026-09-02. Docs surface checked: https://api.webselfstorage.com/ and
+  https://www.webselfstorage.com/.
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-tags:
-  - Moving
-  - Storage
-  - Truck Rental
-  - Logistics
-  - Consumer Services
-  - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the AMERCO API surface. Captures per-tier quotas,
-  burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to be replaced
-  with published provider limits.
+modified: '2026-09-02'
+note: >-
+  REPLACES the 2026-05-04 bulk-sweep scaffold, which asserted 10/100/1000 rpm tiers AMERCO has
+  never published. Those numbers were invented and are removed.
+description: >-
+  AMERCO publishes no rate limits for the WebSelfStorage Affiliate API, and the production host
+  emits no rate-limit headers. An honest zero.
+limit_count: 0
+limits: []
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+  limit: null
+  remaining: null
+  reset: null
+  retryAfter: null
+  policy: null
 responseCodes:
-  throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
-limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - U-Haul
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - U-Haul
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - U-Haul
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - U-Haul
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - U-Haul
-policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+  throttled: null
+evidence:
+- probe: GET https://api.webselfstorage.com/v4/test (no Authorization header)
+  http_status: 401
+  rate_limit_headers_present: false
+  headers_observed:
+  - Content-Type
+  - Request-Context
+  - Content-Security-Policy
+  - X-WssApi-Environment
+  - X-WssApi-Hostname
+  - X-WssApi-Version
+  - Server-Timing
+  - Set-Cookie
+  - X-XSS-Protection
+  - X-Content-Type-Options
+  - Strict-Transport-Security
+  note: >-
+    No X-RateLimit-*, no RateLimit-*, no Retry-After. Only an authenticated call could confirm
+    whether limits are enforced silently, and API Evangelist holds no affiliate key.
+- probe: openapi/amerco-webselfstorage-affiliate-api-v4-openapi.yml
+  finding: No 429 response is declared on any of the 13 operations.
+- probe: https://api.webselfstorage.com/
+  http_status: 200
+  finding: Swagger UI only; no rate-limit or fair-use documentation.
+gap: >-
+  An agent calling this API cannot tell whether it is approaching a limit, cannot learn when it
+  may retry, and has no declared 429 to handle. Publishing RateLimit-Limit / RateLimit-Remaining
+  / RateLimit-Reset and a documented 429 would be the cheapest runtime-semantics improvement
+  available to this contract.
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com

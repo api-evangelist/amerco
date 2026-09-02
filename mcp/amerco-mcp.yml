@@ -1,0 +1,116 @@
+generated: '2026-09-02'
+method: derived
+source: >-
+  openapi/amerco-webselfstorage-affiliate-api-v4-openapi.yml. Searched for a first-party server
+  on 2026-09-02: POST tools/list to /mcp, /sse and /graphql returned HTTP 404 on
+  api.webselfstorage.com, www.webselfstorage.com and www.uhaul.com, and HTTP 403 (Cloudflare
+  bot challenge) on www.amerco.com; no MCP mention in the Swagger console or on
+  webselfstorage.com; github.com/u-haul and github.com/WebSelfStorage both have 0 public repos;
+  npm search for "uhaul" returns only third-party packages.
+provider: AMERCO
+providerId: amerco
+name: WebSelfStorage Affiliate API (candidate MCP server)
+status: candidate
+description: >-
+  AMERCO ships no MCP server. This is a DERIVED candidate tool list showing what one would
+  expose if AMERCO wrapped the WebSelfStorage Affiliate API, mapped one-to-one onto real
+  operations in the published OpenAPI 3.0.1. Nothing here is live and no endpoint is asserted.
+
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: api-key
+  verified: searched
+  note: >-
+    mode:none — nobody ships a server for this API. The auth field records what a server WOULD
+    need (the Authorization: Bearer <affiliate token> header the REST API requires), not an
+    auth flow anyone has implemented. A third-party npm package "@striderlabs/mcp-uhaul" (1.0.0,
+    published 2026-03-17) exists but is not first-party and was not verified, so it is not
+    recorded as a deployment.
+
+third_party_observed:
+- name: '@striderlabs/mcp-uhaul'
+  registry: npm
+  version: 1.0.0
+  published: '2026-03-17'
+  official: false
+  note: Not published by AMERCO/U-Haul; not probed; listed only so a later run does not mistake it for first-party.
+
+candidate_tools:
+- name: list_locations
+  rest: GET /v4/locations
+  description: List every affiliate facility (entity id) the calling key can address.
+  inputs: []
+  consequence: read
+- name: get_location
+  rest: GET /v4/location/{entity}
+  description: Facility profile — address, hours, features, services, coupons and unit types.
+  inputs: [entity]
+  consequence: read
+- name: get_rent_roll
+  rest: GET /v4/location/{entity}/rentroll
+  description: Occupied contracts with tenant, unit, rate, balance and paid-through date.
+  inputs: [entity]
+  consequence: read
+  sensitivity: pii
+- name: get_waiting_list
+  rest: GET /v4/location/{entity}/waitinglist
+  description: Prospects waiting on a size, with contact details and desired unit.
+  inputs: [entity]
+  consequence: read
+  sensitivity: pii
+- name: get_location_reviews
+  rest: GET /v4/location/{entity}/reviews
+  inputs: [entity]
+  consequence: read
+- name: get_location_images
+  rest: GET /v4/location/{entity}/images
+  inputs: [entity]
+  consequence: read
+- name: list_available_units
+  rest: GET /v4/movein/{entity}
+  description: Units currently available for self-service move-in, with size, rate and insurance options.
+  inputs: [entity]
+  consequence: read
+- name: quote_move_in_cost
+  rest: GET /v4/movein/{entity}/cost
+  description: Priced cost breakdown for a prospective move-in. The one rehearsal step in the contract.
+  inputs: [entity, UnitId, InsuranceId, ExpectedMoveInDate, IsTaxExempt, TaxExemptNumber, OneMonthFreeDiscount]
+  consequence: read
+- name: get_payment_portal_url
+  rest: GET /v4/paymentPortalUrl/{entity}
+  description: Hosted payment portal URL for the facility — the PCI-scope-reducing path.
+  inputs: [entity]
+  consequence: read
+- name: create_reservation
+  rest: POST /v4/reservation/{entity}
+  description: Reserve one or more units at a facility.
+  inputs: [entity, reservationDay, units, paymentInfo]
+  consequence: write
+  irreversible: true
+  guard: >-
+    Takes raw card data and has no cancel operation and no idempotency key. Any real MCP server
+    must put this behind explicit human confirmation.
+- name: move_in
+  rest: POST /v4/movein/{entity}
+  description: Commit a move-in — creates a tenancy contract and charges the supplied card.
+  inputs: [entity, unitID, insuranceId, moveInDate, payAmount, paymentInfo, gatePassword]
+  consequence: write
+  irreversible: true
+  guard: >-
+    Money movement with no void, no refund and no reversal window published. See the
+    reversibility block in conventions/amerco-conventions.yml.
+- name: ping
+  rest: GET /v4/test
+  description: Credential and connectivity smoke test.
+  inputs: []
+  consequence: read
+
+excluded_from_candidate_tools:
+- rest: GET /v4/error
+  reason: Deliberate error simulator; not a capability.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

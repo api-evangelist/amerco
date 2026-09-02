@@ -1,0 +1,138 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://www.webselfstorage.com/Features (Merchant Services section),
+  https://www.uhaul.com/Legal/PrivacyPolicy/, https://www.uhaul.com/Legal/TermsOfUse/,
+  openapi/amerco-webselfstorage-affiliate-api-v4-openapi.yml, and live probes of
+  https://api.webselfstorage.com — all 2026-09-02
+provider: AMERCO
+providerId: amerco
+api: WebSelfStorage Affiliate API
+description: >-
+  Standards and compliance posture for AMERCO (U-Haul Holding Company), asserted only where a
+  published claim or the contract itself provides evidence. Sector: self-storage / moving
+  services, with a payments component — the Affiliate API accepts raw cardholder data, which
+  puts every integrator inside PCI DSS scope.
+
+standards:
+- id: pci-dss
+  name: PCI DSS
+  conforms: claimed
+  evidence:
+    url: https://www.webselfstorage.com/Features
+    http_status: 200
+    quote: >-
+      The U-Haul Self-Storage Affiliate Network and WebSelfStorage are committed to protecting
+      customer information by implementing strict PCI (payment card industry) standards.
+    location: Features page, "Merchant Services" section banner text
+  caveats: >-
+    A prose commitment on a marketing page, not a certification artifact. No PCI DSS level,
+    no Attestation of Compliance, no QSA, no validation date and no ROC summary is published,
+    and there is no trust centre to check one against.
+  contract_relevance: >-
+    The API's PaymentInfo schema carries raw creditCard, expirationMMYY and csc, and both write
+    operations (POST /v4/reservation/{entity}, POST /v4/movein/{entity}) accept it, so an
+    affiliate integrating directly against this contract handles primary account numbers and is
+    in PCI DSS scope. GET /v4/paymentPortalUrl/{entity} returns a hosted payment portal URL,
+    which is the scope-reducing alternative the API also offers.
+- id: oauth2
+  name: OAuth 2.0
+  conforms: false
+  evidence: >-
+    The contract declares one apiKey security scheme (Authorization header, "Bearer <token>").
+    No oauth2 or openIdConnect scheme is declared, and /.well-known/oauth-authorization-server,
+    /.well-known/oauth-protected-resource and /.well-known/openid-configuration all return 404
+    on api.webselfstorage.com. The "Bearer" prefix is a bare shared secret, not an OAuth token.
+- id: oidc
+  name: OpenID Connect
+  conforms: false
+  evidence: /.well-known/openid-configuration returns HTTP 404 on api.webselfstorage.com and www.uhaul.com.
+- id: rfc9457
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    The live 401 from https://api.webselfstorage.com/v4/test is served as
+    application/problem+json but the body is an ASP.NET ObjectResult envelope with no type,
+    title, status, detail or instance member. In-contract errors reuse the success envelope
+    (success + errorMessage). See errors/amerco-problem-types.yml.
+- id: rfc8594
+  name: RFC 8594 Sunset header
+  conforms: false
+  evidence: >-
+    No Sunset or Deprecation response header observed; v3 is marked "older" only by a
+    JavaScript-rendered banner in the Swagger UI. See lifecycle/amerco-lifecycle.yml.
+- id: idempotency
+  name: Idempotent write semantics
+  conforms: false
+  evidence: >-
+    No Idempotency-Key parameter or header anywhere in either published OpenAPI document,
+    although both write operations move money.
+- id: pagination
+  name: Collection pagination
+  conforms: false
+  evidence: No limit/offset/page/cursor parameter on any of the five collection operations.
+- id: rfc9116
+  name: RFC 9116 security.txt
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt returns 404 on api.webselfstorage.com and www.uhaul.com, and a
+    soft-200 catch-all ("Invalid key", 11 bytes) on www.amerco.com. See
+    well-known/amerco-well-known.yml.
+- id: openapi
+  name: OpenAPI Specification
+  conforms: true
+  version: 3.0.1
+  evidence: >-
+    https://api.webselfstorage.com/swagger/v4/swagger.json (HTTP 200) and
+    /swagger/v3/swagger.json (HTTP 200) both parse as OpenAPI 3.0.1 with 12 paths and 43
+    component schemas.
+  gaps: >-
+    No operationId on any of the 13 operations, no servers[] block, no info.description,
+    info.contact or info.termsOfService, no tags[] declarations beyond a single generated
+    "WssApiV4"/"WssApiV3" tag, no examples, and no 401/403/429 responses declared.
+
+domain_standard:
+  declared: false
+  candidates_checked:
+  - scim
+  - odata
+  - openrtb
+  - activitypub
+  - oai-pmh
+  - hl7v2
+  - x12
+  - edifact
+  - iso-20022
+  finding: >-
+    The contract declares no domain standard, and self-storage has no widely adopted
+    machine-readable interchange standard for unit inventory, rent roll or move-in to declare.
+    Recorded as an honest absence — the reward-only domain_standard_conformance check should not
+    be satisfied by inventing one. The nearest adjacent standard that WOULD apply is ISO 20022
+    or an X12 811/820 for the payment leg, and neither appears in the contract.
+
+certifications:
+  published: []
+  trust_center: null
+  note: >-
+    No trust centre, SOC 2, ISO 27001, HIPAA or FedRAMP claim was found on uhaul.com,
+    amerco.com or webselfstorage.com. probe-security-programs.py returned vdp=none trust=none
+    on 2026-09-02.
+
+privacy:
+- name: U-Haul Privacy Policy
+  url: https://www.uhaul.com/Legal/PrivacyPolicy/
+  http_status: 200
+  contact: privacy@uhaul.com
+  note: >-
+    Covers CCPA/CPRA-style choice and access rights and a breach-notification commitment.
+    U-Haul also publishes a separate biometric information policy at
+    https://www.uhaul.com/Legal/BiometricInformation/.
+- name: WebSelfStorage Privacy Notice
+  url: https://www.webselfstorage.com/PrivacyNotice
+  http_status: 200
+- name: U-Haul Terms of Use
+  url: https://www.uhaul.com/Legal/TermsOfUse/
+  http_status: 200
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

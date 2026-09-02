@@ -1,0 +1,217 @@
+generated: '2026-09-02'
+method: derived
+source: openapi/amerco-webselfstorage-affiliate-api-v4-openapi.yml ($ref graph + id-reference fields)
+provider: AMERCO
+providerId: amerco
+api: WebSelfStorage Affiliate API
+description: >-
+  Entity-relationship graph for the WebSelfStorage Affiliate API, derived from the $ref links
+  and identifier fields in the published OpenAPI 3.0.1 document. 43 component schemas; the
+  response wrappers are listed separately from the domain entities they carry.
+
+identifiers:
+- name: entity
+  type: integer
+  scope: path parameter on every operation except GET /v4/locations
+  meaning: The affiliate facility (location) identifier. Root of the whole model.
+  discovered_by: GET /v4/locations (returns entities[] — the ids this key may address)
+- name: unitId
+  type: string/uuid
+  meaning: A storage unit type or a specific rentable unit, depending on the schema carrying it.
+- name: rentableObjectId
+  type: string/uuid
+  meaning: The rentable object behind a unit type; used alongside unitId on availability.
+- name: insuranceId
+  type: string/uuid
+  meaning: A Safestor tenant-insurance option selected at reservation or move-in.
+- name: contractUnitId
+  type: string/uuid
+  meaning: The occupied contract row on the rent roll.
+- name: waitingListID
+  type: string/uuid
+- name: contractNumber
+  type: string
+  meaning: Returned by POST /v4/movein/{entity}; the tenancy contract created.
+- name: reservationNumber
+  type: string
+  meaning: Returned by POST /v4/reservation/{entity}.
+
+entities:
+- name: Location
+  schema: LocationInformation
+  read_by: GET /v4/location/{entity}
+  description: A U-Haul Self-Storage Affiliate facility — address, hours, features, services, coupons, unit types.
+- name: UnitType
+  schema: UnitType
+  description: A size/class of storage unit at a location, with rate, dimensions, availability counts and reservation rules.
+- name: SelfMoveInUnit
+  schema: SelfMoveInUnit
+  read_by: GET /v4/movein/{entity}
+  description: An availability projection of UnitType for the self-service move-in flow.
+- name: Unit
+  schema: Unit
+  description: A single physical rentable unit (unitId + unitNumber).
+- name: InsuranceOption
+  schema: InsuranceOption
+  description: A Safestor tenant-insurance offer attached to a unit type.
+- name: Coupon
+  schema: Coupon
+- name: ServiceCharge
+  schema: ServiceCharge
+- name: RentRoll
+  schema: RentRoll
+  read_by: GET /v4/location/{entity}/rentroll
+  description: An occupied contract row — tenant, unit, rate, balance, paid-through, days occupied.
+- name: WaitingListItem
+  schema: WaitingListItemViewModel
+  read_by: GET /v4/location/{entity}/waitinglist
+- name: Review
+  schema: WssRating
+  read_by: GET /v4/location/{entity}/reviews
+- name: Customer
+  schema: Customer
+- name: PaymentInfo
+  schema: PaymentInfo
+  sensitivity: cardholder-data
+  description: Raw card details (creditCard, expirationMMYY, csc) plus billing name and address.
+- name: UnitReservation
+  schema: UnitReservation
+- name: MoveInCostBreakDown
+  schema: MoveInCostBreakDown
+  read_by: GET /v4/movein/{entity}/cost
+
+relationships:
+- from: Location
+  to: UnitType
+  kind: has_many
+  via: LocationInformation.units
+- from: Location
+  to: Coupon
+  kind: has_many
+  via: LocationInformation.coupons
+- from: Location
+  to: FacilityFeature
+  kind: has_many
+  via: LocationInformation.facilityFeatures
+- from: Location
+  to: LocationFeature
+  kind: has_many
+  via: LocationInformation.locationFeatures
+- from: Location
+  to: LocationService
+  kind: has_many
+  via: LocationInformation.locationServices
+- from: Location
+  to: Address
+  kind: has_one
+  via: LocationInformation.address
+- from: Location
+  to: HoursOfOperation
+  kind: has_one
+  via: LocationInformation.hoursOfOperation
+- from: HoursOfOperation
+  to: WeeklyHours
+  kind: has_many
+- from: UnitType
+  to: InsuranceOption
+  kind: has_many
+  via: UnitType.insuranceOptions
+- from: UnitType
+  to: ServiceCharge
+  kind: has_many
+  via: UnitType.serviceCharges
+- from: UnitType
+  to: UnitFeature
+  kind: has_one
+  via: UnitType.unitFeature
+- from: UnitType
+  to: UnitStorageGuide
+  kind: has_one
+  via: UnitType.unitStorageGuide
+- from: UnitType
+  to: UnitTypeImage
+  kind: has_one
+  via: UnitType.unitTypeImage
+- from: UnitType
+  to: Portable
+  kind: has_one
+  via: UnitType.portable
+- from: UnitType
+  to: RoomSizeReservationRules
+  kind: has_one
+  via: UnitType.roomSizeReservationRules
+- from: SelfMoveInUnit
+  to: Unit
+  kind: has_many
+  via: SelfMoveInUnit.units
+- from: SelfMoveInUnit
+  to: InsuranceOption
+  kind: has_many
+  via: SelfMoveInUnit.insuranceOptions
+- from: ReservationRequest
+  to: UnitReservation
+  kind: has_many
+  via: ReservationRequest.units
+- from: ReservationRequest
+  to: PaymentInfo
+  kind: has_one
+  via: ReservationRequest.paymentInfo
+- from: MoveInRequest
+  to: PaymentInfo
+  kind: has_one
+  via: MoveInRequest.paymentInfo
+- from: MoveInRequest
+  to: Customer
+  kind: has_one
+  via: MoveInRequest.alternateContact
+- from: MoveInRequest
+  to: UnitType
+  kind: belongs_to
+  via: MoveInRequest.unitID (id reference, not a $ref)
+- from: MoveInRequest
+  to: InsuranceOption
+  kind: belongs_to
+  via: MoveInRequest.insuranceId (id reference, not a $ref)
+- from: MoveInCostResponse
+  to: MoveInCostBreakDown
+  kind: has_one
+  via: MoveInCostResponse.costBreakDown
+- from: RentRoll
+  to: Unit
+  kind: belongs_to
+  via: RentRoll.contractUnitId (id reference, not a $ref)
+
+response_wrappers:
+- BaseResponse
+- InvalidParameterResult
+- LocationsResponse
+- LocationResponse
+- LocationImagesResponse
+- LocationReviewsResponse
+- RentRollResponse
+- WaitingListResponse
+- AvailableUnitResponse
+- ReservationResponse
+- MoveInResponse
+- MoveInCostResponse
+- PaymentPortalUrlResponse
+
+enums:
+- DayOfTheWeek
+- InsuranceCoverageTypesEnum
+
+notes:
+- >-
+  The model is strictly entity-rooted: nothing is addressable without an `entity`, and there is
+  no cross-facility or organization-level resource, so a multi-facility operator fans out over
+  GET /v4/locations.
+- >-
+  Identifier references (unitID, insuranceId, contractUnitId) are plain uuid strings with no
+  $ref and no documented lookup operation, so a client cannot resolve one back to its parent
+  object without re-reading the containing collection.
+- >-
+  There is no DELETE, PUT or PATCH anywhere in the contract; the graph is read-mostly with two
+  append-only write paths.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

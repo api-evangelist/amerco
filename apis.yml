@@ -44,7 +44,7 @@ tags:
 url: >-
   https://raw.githubusercontent.com/api-evangelist/amerco/refs/heads/main/apis.yml
 created: '2026-03-23'
-modified: '2026-04-19'
+modified: '2026-09-02'
 specificationVersion: '0.23'
 apis:
   - aid: amerco:uhaul
@@ -57,6 +57,13 @@ apis:
       software.
     humanURL: https://www.uhaul.com/
     baseURL: https://www.uhaul.com
+    x-base-url-note: >-
+      www.uhaul.com is the production host for the U-Haul consumer and dealer web surface, not
+      an API host. U-Haul publishes no API base URL for truck rental, U-Box, Moving Help or the
+      dealer program — probed 2026-09-02: api.uhaul.com and developer.uhaul.com do not resolve,
+      and www.uhaul.com/openapi.json, /swagger.json, /api-docs and /llms.txt all return HTTP
+      404. Recorded honestly rather than guessed. The one AMERCO API with a real base is the
+      WebSelfStorage Affiliate API at https://api.webselfstorage.com.
     tags:
       - Moving
       - Storage
@@ -68,7 +75,54 @@ apis:
       - type: Portal
         url: https://www.uhaul.com/Dealer/
 
+  - aid: amerco:webselfstorage
+    name: WebSelfStorage Affiliate API
+    description: >-
+      The WebSelfStorage Affiliate API is the only machine-readable contract AMERCO publishes.
+      Operated by eMove, Inc. d/b/a U-Haul Self-Storage Affiliate Network, it gives an
+      independent self-storage operator programmatic access to their own facility: location
+      profile, unit types and rates, live move-in availability and cost, rent roll, waiting
+      list, reviews, images, a hosted payment portal URL, and two write operations —
+      reservation and move-in commit. REST over HTTPS, described by OpenAPI 3.0.1, versions
+      v4 (current) and v3, authenticated with an affiliate access token in the Authorization
+      header. Access is a benefit of the U-Haul Self-Storage Affiliate Network relationship;
+      there is no self-service sign-up and no published pricing for API access.
+    humanURL: https://www.webselfstorage.com/
+    baseURL: https://api.webselfstorage.com
+    tags:
+      - Storage
+      - Self Storage
+      - Facility Management
+      - Reservations
+      - Payments
+      - Affiliate Network
+    properties:
+      - type: OpenAPI
+        url: openapi/amerco-webselfstorage-affiliate-api-v4-openapi.yml
+      - type: OpenAPI
+        url: openapi/amerco-webselfstorage-affiliate-api-v3-openapi.yml
+      - type: Documentation
+        url: https://api.webselfstorage.com/
+      - type: APIReference
+        url: https://api.webselfstorage.com/
+      - type: Authentication
+        url: authentication/amerco-authentication.yml
+      - type: Conventions
+        url: conventions/amerco-conventions.yml
+      - type: ErrorCatalog
+        url: errors/amerco-problem-types.yml
+      - type: DataModel
+        url: data-model/amerco-data-model.yml
+      - type: Overlay
+        url: overlays/amerco-webselfstorage-affiliate-api-v4-overlay.yaml
+      - type: Lifecycle
+        url: lifecycle/amerco-lifecycle.yml
+      - type: SignUp
+        url: https://www.webselfstorage.com/SignUp
+
 common:
+  - type: Authentication
+    url: authentication/amerco-authentication.yml
   - type: DomainSecurity
     url: security/amerco-domain-security.yml
   - url: https://www.uhaul.com/Blog/feed/
@@ -140,6 +194,53 @@ common:
         description: >-
           AMERCO subsidiary providing life insurance products as part of the
           broader AMERCO financial services portfolio.
+  - type: OpenAPI
+    url: openapi/amerco-webselfstorage-affiliate-api-v4-openapi.yml
+  - type: Documentation
+    url: https://api.webselfstorage.com/
+  - type: APIReference
+    url: https://api.webselfstorage.com/
+  - type: Conventions
+    url: conventions/amerco-conventions.yml
+  - type: ErrorCatalog
+    url: errors/amerco-problem-types.yml
+  - type: DataModel
+    url: data-model/amerco-data-model.yml
+  - type: Overlay
+    url: overlays/amerco-webselfstorage-affiliate-api-v4-overlay.yaml
+  - type: Lifecycle
+    url: lifecycle/amerco-lifecycle.yml
+  - type: StatusPage
+    url: https://status.uhaul.com/
+  - type: Conformance
+    url: conformance/amerco-conformance.yml
+  - type: Compliance
+    url: conformance/amerco-conformance.yml
+  - type: Packages
+    url: packages/amerco-packages.yml
+  - type: Plans
+    url: plans/amerco-plans-pricing.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: LLMsTxt
+    url: llms/amerco-llms.txt
+  - type: Support
+    url: https://www.webselfstorage.com/ContactUs
+  - type: SignUp
+    url: https://www.webselfstorage.com/SignUp
+  - type: Login
+    url: https://www.webselfstorage.com/SignIn
+  - type: TermsOfService
+    url: https://www.uhaul.com/Legal/TermsOfUse/
+  - type: PrivacyPolicy
+    url: https://www.uhaul.com/Legal/PrivacyPolicy/
+  - type: GitHubOrganization
+    url: https://github.com/u-haul
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-09-02'
+  status: enriched
+  artifacts_added: 19
+  pass: local-v1

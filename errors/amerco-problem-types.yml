@@ -1,0 +1,151 @@
+generated: '2026-09-02'
+method: derived
+source: >-
+  openapi/amerco-webselfstorage-affiliate-api-v4-openapi.yml (4xx/5xx responses) plus a live
+  unauthenticated GET https://api.webselfstorage.com/v4/test, 2026-09-02
+provider: AMERCO
+providerId: amerco
+api: WebSelfStorage Affiliate API
+format: vendor
+rfc9457: false
+description: >-
+  Error catalog for the WebSelfStorage Affiliate API, derived from the 4xx/5xx responses
+  declared in the published OpenAPI 3.0.1 document and from one live production response. The
+  API does NOT emit RFC 9457 problem documents; it reuses its success envelope for failures.
+  No numeric or symbolic error-code registry is published, so no code column is invented here.
+
+envelope:
+  shape: >-
+    Every in-contract response — success and failure alike — carries `success` (boolean) and
+    `errorMessage` (string). A failure is signalled by success=false plus an HTTP status; the
+    payload members of the response schema are simply absent or empty.
+  base_schema: BaseResponse
+  members:
+  - name: success
+    type: boolean
+  - name: errorMessage
+    type: string
+  extended_schema: InvalidParameterResult
+  extended_members:
+  - name: parameter
+    type: string
+    description: The request member that failed validation.
+  - name: reason
+    type: string
+    description: Why that member was rejected.
+  gateway_envelope:
+    observed_on: 401
+    content_type: application/problem+json
+    body_shape: >-
+      {"Value":{"Success":<bool>,"ErrorMessage":"<string>"},"Formatters":[],"ContentTypes":[],"DeclaredType":null,"StatusCode":<int>}
+    warning: >-
+      This is an ASP.NET ObjectResult serialization, not an RFC 9457 problem document, despite
+      the application/problem+json content type. It also uses PascalCase members (Success,
+      ErrorMessage) where the in-contract envelope uses camelCase (success, errorMessage). A
+      client that parses one shape will fail on the other.
+
+problem_types:
+- status: 401
+  title: Unauthorized
+  schema: null
+  detail: 'Unauthorized. Specify your API key in the Authorization header.'
+  operations: all
+  method: probed
+  evidence: 'live GET https://api.webselfstorage.com/v4/test with no Authorization header, 2026-09-02'
+  remediation: >-
+    Send the affiliate access token as `Authorization: Bearer <token>`. Keys are issued to
+    U-Haul Self-Storage Affiliates; they are not self-service.
+- status: 400
+  title: No locations found or an error occurred for the requested entity
+  schema: LocationResponse
+  operations:
+  - 'GET /v4/location/{entity}'
+  remediation: >-
+    Confirm the entity id is one returned by GET /v4/locations for this key. The response reuses
+    the success envelope, so read `success` and `errorMessage` rather than assuming a body.
+- status: 400
+  title: Request for entity failed or request failed to find any rent roll
+  schema: BaseResponse
+  operations:
+  - 'GET /v4/location/{entity}/rentroll'
+- status: 500
+  title: An unknown error occurred on the server
+  schema: BaseResponse
+  operations:
+  - 'GET /v4/location/{entity}/rentroll'
+  - 'GET /v4/location/{entity}/waitinglist'
+  remediation: Retry with backoff; no Retry-After header is emitted.
+- status: 400
+  title: Request for entity failed or request failed to find any waiting list items
+  schema: WaitingListResponse
+  operations:
+  - 'GET /v4/location/{entity}/waitinglist'
+- status: 400
+  title: Request for entity failed
+  schema: LocationReviewsResponse
+  operations:
+  - 'GET /v4/location/{entity}/reviews'
+- status: 400
+  title: Request for entity failed
+  schema: LocationImagesResponse
+  operations:
+  - 'GET /v4/location/{entity}/images'
+- status: 400
+  title: Invalid PaymentInfo or ReservationDay
+  schema: InvalidParameterResult
+  operations:
+  - 'POST /v4/reservation/{entity}'
+  remediation: >-
+    Read `parameter` and `reason` to locate the rejected member. This is the only 400 in the
+    contract that names the offending field.
+- status: 500
+  title: An unknown server error occurred
+  schema: BaseResponse
+  operations:
+  - 'POST /v4/reservation/{entity}'
+  - 'GET /v4/paymentPortalUrl/{entity}'
+  - 'POST /v4/movein/{entity}'
+  - 'GET /v4/movein/{entity}/cost'
+  warning: >-
+    POST /v4/reservation/{entity} and POST /v4/movein/{entity} carry payment card data and have
+    no idempotency key. A 500 leaves the caller unable to tell whether the charge landed, and
+    the contract publishes no way to query or reverse it. Treat a 500 on these two operations
+    as indeterminate and reconcile out of band.
+- status: 400
+  title: Invalid location, locationId, or undefined payment url
+  schema: BaseResponse
+  operations:
+  - 'GET /v4/paymentPortalUrl/{entity}'
+- status: 400
+  title: Invalid request
+  schema: AvailableUnitResponse
+  operations:
+  - 'GET /v4/movein/{entity}'
+- status: 500
+  title: An unknown server error occurred
+  schema: null
+  operations:
+  - 'GET /v4/movein/{entity}'
+  note: Declared with no response content in the contract.
+- status: 400
+  title: Invalid payment info or inputs
+  schema: MoveInResponse
+  operations:
+  - 'POST /v4/movein/{entity}'
+- status: 400
+  title: Invalid request
+  schema: MoveInCostResponse
+  operations:
+  - 'GET /v4/movein/{entity}/cost'
+
+gaps:
+- No 401 or 403 response is declared on any operation, although every operation requires a key
+  and the live host returns 401.
+- No 429 response is declared and no rate-limit headers are emitted.
+- No stable machine-readable error code — only free-text errorMessage — so clients must match
+  on prose.
+- The declared error content type (application/json) and the observed gateway content type
+  (application/problem+json) disagree.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

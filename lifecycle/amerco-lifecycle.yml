@@ -1,0 +1,129 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://api.webselfstorage.com/ (Swagger UI version selector),
+  https://api.webselfstorage.com/Scripts/SwaggerRender.js (older-version banner),
+  https://status.uhaul.com/ and https://status.uhaul.com/api/v2/summary.json — all probed 2026-09-02
+provider: AMERCO
+providerId: amerco
+api: WebSelfStorage Affiliate API
+description: >-
+  Versioning, deprecation signalling, status and support posture for the WebSelfStorage
+  Affiliate API — the one machine-readable contract AMERCO (U-Haul Holding Company) publishes.
+
+versioning:
+  scheme: uri-path
+  current_version: v4
+  supported_versions:
+  - version: v4
+    spec: https://api.webselfstorage.com/swagger/v4/swagger.json
+    status: current
+    http_status_observed: 200
+    operations: 12
+  - version: v3
+    spec: https://api.webselfstorage.com/swagger/v3/swagger.json
+    status: older
+    http_status_observed: 200
+    operations: 12
+    note: >-
+      Path-for-path identical to v4 (same 12 paths, same 43 component schemas, same single
+      apiKey scheme) — only the /v3 vs /v4 prefix and info.version differ.
+  discovery: https://api.webselfstorage.com/
+  note: >-
+    Version discovery is a client-side Swagger UI dropdown. There is no versions endpoint, no
+    Link header, and no /swagger/index or catalog document, so an agent has to read
+    /Scripts/SwaggerRender.js to learn that two versions exist.
+
+deprecation:
+  policy_published: false
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  signal:
+    kind: docs-console-banner
+    text: 'You are viewing an older version of our API.'
+    rendered_when: the Swagger UI version selector is switched to /swagger/v3/swagger.json
+    source: https://api.webselfstorage.com/Scripts/SwaggerRender.js
+  detail: >-
+    v3 is marked "older" in the console but is NOT marked deprecated in the contract: no
+    operation carries `deprecated: true`, no Deprecation or Sunset response header was observed,
+    and no end-of-life date is published anywhere. The banner is a human-only signal rendered by
+    JavaScript inside the docs page — an agent reading the spec sees nothing.
+  deprecated_operations: []
+
+status_page:
+  url: https://status.uhaul.com/
+  http_status: 200
+  platform: Atlassian Statuspage
+  page_id: 15d3d0y9xzcm
+  name: U-Haul System Status
+  time_zone: America/Phoenix
+  machine_readable:
+  - url: https://status.uhaul.com/api/v2/status.json
+    status: 200
+  - url: https://status.uhaul.com/api/v2/summary.json
+    status: 200
+  - url: https://status.uhaul.com/api/v2/components.json
+    status: 200
+  - url: https://status.uhaul.com/history.atom
+    status: 200
+  - url: https://status.uhaul.com/history.rss
+    status: 200
+  component_count: 60
+  covers_this_api: true
+  covering_component: WebSelfStorage
+  covering_component_note: >-
+    "WebSelfStorage" is a tracked component on the page (description: "Setting up this page for
+    WSS use. We may need to add sub componants to this category."), so the platform behind the
+    Affiliate API is in scope of the status page even though the API itself is not a named
+    component.
+  component_groups:
+  - Point of Sale
+  - POS Mobile (Dashboard)
+  - Payments
+  - uhaul.com and Truck Share
+  - Rates and Distribution
+  - uhaul.net
+  - Contact Center
+  - Dealer Network
+  - Repair
+  - Network
+  - VoIP
+  - Email/O365 applications
+  incident_history: true
+  observed_state: 'All Systems Operational (indicator: none) at 2026-09-02T08:29:31-07:00'
+
+sla:
+  published: false
+  url: null
+  note: No uptime or response-time commitment is published for the Affiliate API.
+
+changelog:
+  published: false
+  url: null
+  note: >-
+    No dated changelog or release-notes page was found on api.webselfstorage.com or
+    webselfstorage.com (/Changelog and /ReleaseNotes both 404). The only change signal is the
+    appearance of a new version prefix in the Swagger UI selector, so no changelog/ artifact is
+    written.
+
+support:
+  channels:
+  - kind: email
+    value: saleswss@uhaul.com
+    scope: U-Haul Self-Storage Affiliate sales
+    source: https://www.webselfstorage.com/
+  - kind: web
+    value: https://www.webselfstorage.com/ContactUs
+  - kind: phone
+    value: '1-866-323-4337'
+    scope: WebSelfStorage contact centre
+    source: https://www.webselfstorage.com/Features
+  developer_support: >-
+    No developer-specific support channel, forum or issue tracker is published. The GitHub
+    organizations github.com/u-haul (U-Haul International, Inc.) and github.com/WebSelfStorage
+    both exist and both have zero public repositories.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,48 @@
+generated: '2026-09-02'
+method: generated
+source: >-
+  openapi/amerco-webselfstorage-affiliate-api-v4-openapi.yml plus conventions/, errors/ and
+  lifecycle/ in this repository. Searched first for provider-published skills or an AGENTS.md
+  on api.webselfstorage.com, webselfstorage.com, uhaul.com and both GitHub organizations
+  (github.com/u-haul, github.com/WebSelfStorage — 0 public repos each) on 2026-09-02: none exist.
+provider: AMERCO
+providerId: amerco
+api: WebSelfStorage Affiliate API
+description: >-
+  Packaged Agent Skills for the one API AMERCO publishes. Every operation referenced is a real
+  method+path from the published OpenAPI 3.0.1 document; the contract declares no operationIds,
+  so none are invented here.
+skills:
+- name: amerco-facility-inventory-sync
+  file: amerco-facility-inventory-sync.md
+  consequence: read-only
+  summary: Discover addressable facilities, then pull profile, unit types, rates and live move-in availability.
+  operations:
+  - GET /v4/locations
+  - GET /v4/location/{entity}
+  - GET /v4/movein/{entity}
+  - GET /v4/location/{entity}/images
+  - GET /v4/location/{entity}/reviews
+- name: amerco-move-in-quote-and-commit
+  file: amerco-move-in-quote-and-commit.md
+  consequence: irreversible-write
+  summary: Quote a move-in with the cost endpoint, confirm with a human, then commit the tenancy and charge.
+  operations:
+  - GET /v4/movein/{entity}
+  - GET /v4/movein/{entity}/cost
+  - GET /v4/paymentPortalUrl/{entity}
+  - POST /v4/movein/{entity}
+  - POST /v4/reservation/{entity}
+  guard: >-
+    No reversal operation and no idempotency key exist in the contract. Require explicit human
+    confirmation; never auto-retry a timeout or a 500.
+- name: amerco-rent-roll-reporting
+  file: amerco-rent-roll-reporting.md
+  consequence: read-only-sensitive
+  summary: Occupancy, delinquency and demand reporting from the rent roll and waiting list.
+  operations:
+  - GET /v4/locations
+  - GET /v4/location/{entity}/rentroll
+  - GET /v4/location/{entity}/waitinglist
+  - GET /v4/location/{entity}
+  guard: Both payloads carry tenant PII with no redacted view available. Aggregate before storing.

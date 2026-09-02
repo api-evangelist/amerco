@@ -1,0 +1,99 @@
+# AMERCO (U-Haul Holding Company)
+
+> AMERCO, operating as U-Haul Holding Company, is North America's largest do-it-yourself
+> moving and storage company: truck and trailer rental, self-storage, moving supplies, U-Box
+> portable containers, the Moving Help marketplace, and the U-Haul Self-Storage Affiliate
+> Network. Its one public machine-readable API is the WebSelfStorage Affiliate API, operated by
+> eMove, Inc. d/b/a U-Haul Self-Storage Affiliate Network, which lets an independent
+> self-storage operator read and transact against their own facility.
+
+Generated: 2026-09-02
+Method: generated (from apis.yml + the artifacts in this repository; /llms.txt is not published
+by AMERCO — https://www.uhaul.com/llms.txt and https://api.webselfstorage.com/llms.txt both
+return HTTP 404)
+Source: https://github.com/api-evangelist/amerco
+
+## What is actually callable
+
+There is exactly one published contract. The WebSelfStorage Affiliate API is REST over HTTPS,
+described by OpenAPI 3.0.1, and requires an affiliate access token — it is not open to the
+public and there is no self-service sign-up. Everything else U-Haul operates (uhaul.com
+reservations, the dealer portal, Moving Help, U-Box) has no published API.
+
+- Base URL: https://api.webselfstorage.com
+- Auth: `Authorization: Bearer <affiliate access token>` (single apiKey scheme)
+- Current version: v4 (v3 still served, marked "older" in the console)
+- No sandbox, no rate limits published, no idempotency, no pagination, no webhooks, no MCP
+  server, no A2A agent card, no SDK.
+
+## Specifications
+
+- [OpenAPI 3.0.1 — WebSelfStorage Affiliate API v4](https://api.webselfstorage.com/swagger/v4/swagger.json): 12 paths, 13 operations, 43 schemas.
+- [OpenAPI 3.0.1 — WebSelfStorage Affiliate API v3](https://api.webselfstorage.com/swagger/v3/swagger.json): identical shape under a /v3 prefix.
+- [Interactive reference (Swagger UI)](https://api.webselfstorage.com/)
+
+## Operations
+
+Every path but `/v4/locations` takes a required `entity` path parameter — the affiliate facility id.
+
+- `GET /v4/locations` — list the entities this key can address. Call this first.
+- `GET /v4/location/{entity}` — facility profile: address, hours, features, services, coupons, unit types.
+- `GET /v4/location/{entity}/rentroll` — occupied contracts: tenant, unit, rate, balance, paid-through. Contains PII.
+- `GET /v4/location/{entity}/waitinglist` — prospects waiting on a size. Contains PII.
+- `GET /v4/location/{entity}/reviews` — facility reviews.
+- `GET /v4/location/{entity}/images` — facility images.
+- `GET /v4/movein/{entity}` — units currently available for self-service move-in.
+- `GET /v4/movein/{entity}/cost` — priced cost breakdown for a prospective move-in (the only rehearsal step in the contract).
+- `GET /v4/paymentPortalUrl/{entity}` — hosted payment portal URL for the facility.
+- `POST /v4/reservation/{entity}` — reserve units. Irreversible; carries raw card data.
+- `POST /v4/movein/{entity}` — commit a move-in: creates a tenancy contract and charges the card. Irreversible.
+- `GET /v4/test` — success simulator, useful as a credential smoke test.
+- `GET /v4/error` — error simulator.
+
+## What an agent must know before calling
+
+- **Both writes are one-way.** There is no cancel, void, refund, reverse, DELETE, PUT or PATCH
+  anywhere in the contract, and no reversal window is published. Confirm with a human before
+  `POST /v4/reservation/{entity}` or `POST /v4/movein/{entity}`.
+- **No idempotency key.** A retry after a timeout on either write risks a duplicate charge.
+- **Errors are not RFC 9457.** In-contract failures reuse the success envelope (`success`,
+  `errorMessage`); the gateway 401 is served as `application/problem+json` but is an ASP.NET
+  ObjectResult with PascalCase members. Handle both shapes.
+- **No rate-limit signal.** No `RateLimit-*`, no `Retry-After`, no declared 429.
+- **PCI scope.** `PaymentInfo` carries `creditCard`, `expirationMMYY` and `csc`. Use
+  `GET /v4/paymentPortalUrl/{entity}` instead where you can.
+- **Unbounded collections.** No pagination on rent roll, waiting list, reviews or images.
+
+## Artifacts in this repository
+
+- openapi/amerco-webselfstorage-affiliate-api-v4-openapi.yml
+- openapi/amerco-webselfstorage-affiliate-api-v3-openapi.yml
+- openapi/_original/ — the two specs exactly as fetched
+- authentication/amerco-authentication.yml
+- conventions/amerco-conventions.yml — idempotency, pagination, tracing, versioning, reversibility
+- errors/amerco-problem-types.yml
+- data-model/amerco-data-model.yml
+- lifecycle/amerco-lifecycle.yml — versioning, deprecation signal, status page
+- conformance/amerco-conformance.yml — PCI claim and standards posture
+- rate-limits/amerco-rate-limits.yml — an honest zero
+- plans/amerco-plans-pricing.yml — no API pricing; published platform fees recorded
+- packages/amerco-packages.yml — no first-party SDK exists
+- mcp/amerco-mcp.yml — derived candidate tool list; AMERCO ships no MCP server
+- well-known/amerco-well-known.yml — every probe, including the amerco.com soft-200 catch-all
+- security/amerco-domain-security.yml
+- overlays/amerco-webselfstorage-affiliate-api-v4-overlay.yaml
+- skills/ — packaged Agent Skills grounded in the real operations
+
+## Human surfaces
+
+- U-Haul: https://www.uhaul.com/
+- AMERCO corporate: https://www.amerco.com/
+- WebSelfStorage: https://www.webselfstorage.com/
+- Become an affiliate: https://www.webselfstorage.com/PartnerWithUs
+- Contact: https://www.webselfstorage.com/ContactUs — saleswss@uhaul.com — 1-866-323-4337
+- U-Haul dealer program: https://www.uhaul.com/Dealer/
+- Status: https://status.uhaul.com/ (Atlassian Statuspage; WebSelfStorage is a tracked component)
+- Terms: https://www.uhaul.com/Legal/TermsOfUse/
+- Privacy: https://www.uhaul.com/Legal/PrivacyPolicy/ — privacy@uhaul.com
+- Blog: https://www.uhaul.com/Blog/
+- GitHub: https://github.com/u-haul (0 public repositories)

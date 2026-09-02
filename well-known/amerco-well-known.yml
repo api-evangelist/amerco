@@ -1,0 +1,88 @@
+generated: '2026-09-02'
+method: probed
+source: live GET probes of every apis.yml + OpenAPI servers[] host, 2026-09-02
+note: >-
+  No host served a real well-known document. www.amerco.com answers HTTP 200 with an
+  11-byte body reading "Invalid key" for EVERY /.well-known/* path — a catch-all soft-200,
+  not a document — so it is recorded as a miss, and no WellKnown or SecurityTxt pointer is
+  emitted. www.uhaul.com and api.webselfstorage.com return honest 404s.
+hosts:
+- host: api.webselfstorage.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: www.uhaul.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: www.amerco.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    note: 'soft-200 catch-all: 11-byte body "Invalid key", content-type text/html — not a document'
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: null
+    note: 'soft-200 catch-all: 11-byte body "Invalid key" — not a document'
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: null
+    note: 'soft-200 catch-all: 11-byte body "Invalid key" — not a document'
+  - path: /.well-known/api-catalog
+    status: 200
+    file: null
+    note: 'soft-200 catch-all: 11-byte body "Invalid key" — not a document'
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: null
+    note: 'soft-200 catch-all: 11-byte body "Invalid key" — not a document'
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+    note: 'soft-200 catch-all: 11-byte body "Invalid key" — not a document'
+  - path: /.well-known/agent.json
+    status: 200
+    file: null
+    note: 'soft-200 catch-all: 11-byte body "Invalid key" — not a document'

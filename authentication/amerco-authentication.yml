@@ -1,0 +1,17 @@
+generated: '2026-09-02'
+method: derived
+source: openapi/amerco-webselfstorage-affiliate-api-v3-openapi.yml, openapi/amerco-webselfstorage-affiliate-api-v4-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: apiKey
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: Add "Bearer" followed by space and then your access token to test
+  sources:
+  - openapi/amerco-webselfstorage-affiliate-api-v3-openapi.yml
+  - openapi/amerco-webselfstorage-affiliate-api-v4-openapi.yml

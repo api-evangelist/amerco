@@ -1,0 +1,190 @@
+generated: '2026-09-02'
+method: derived
+source: >-
+  openapi/amerco-webselfstorage-affiliate-api-v4-openapi.yml,
+  openapi/amerco-webselfstorage-affiliate-api-v3-openapi.yml,
+  live probes of https://api.webselfstorage.com/v4/test (HTTP 401) and
+  https://api.webselfstorage.com/ (Swagger UI), 2026-09-02
+provider: AMERCO
+providerId: amerco
+api: WebSelfStorage Affiliate API
+description: >-
+  Cross-cutting runtime semantics for the WebSelfStorage Affiliate API — the only
+  machine-readable contract AMERCO (U-Haul Holding Company) publishes. Derived from the
+  published OpenAPI 3.0.1 documents and from live, unauthenticated observation of the
+  production host. Nothing here is asserted that the contract or a live response did not
+  show.
+
+authentication:
+  style: api-key
+  scheme_name: apiKey
+  location: header
+  parameter: Authorization
+  format: 'Bearer <access token>'
+  spec_note: >-
+    The contract declares a single apiKey scheme named "apiKey" carried in the Authorization
+    header, described as 'Add "Bearer" followed by space and then your access token to test'.
+    The document-level security requirement names "Bearer", which does not match the declared
+    scheme key "apiKey" — a spec defect, not a second scheme.
+  observed: >-
+    GET https://api.webselfstorage.com/v4/test with no credentials returns HTTP 401 with
+    body {"Value":{"Success":false,"ErrorMessage":"Unauthorized. Specify your API key in the
+    Authorization header."},...}
+  key_issuance: >-
+    Not documented publicly. Keys are issued to U-Haul Self-Storage Affiliates; the affiliate
+    relationship is established through https://www.webselfstorage.com/PartnerWithUs.
+  see_also: authentication/amerco-authentication.yml
+
+tenancy:
+  model: entity-scoped
+  description: >-
+    Every resource operation but /locations is scoped by a required `entity` path parameter —
+    the affiliate facility identifier. GET /v4/locations lists exactly the entities the calling
+    key has access to, so it is the discovery call an integration must make first.
+  discovery_operation: GET /v4/locations
+
+idempotency:
+  supported: false
+  header: null
+  scope: null
+  retention: null
+  evidence: >-
+    No Idempotency-Key (or equivalent) parameter or header appears anywhere in either published
+    OpenAPI document, and no idempotency guidance is published on webselfstorage.com. The two
+    write operations — POST /v4/reservation/{entity} and POST /v4/movein/{entity} — are the
+    ones that need it: both take payment card details in the request body and both are money
+    movements, so a retried request after a timeout risks a duplicate charge.
+  recommendation: >-
+    Accept a client-supplied idempotency key on both POST operations and return the original
+    response on replay. This is the single highest-value runtime-semantics gap in the contract.
+
+pagination:
+  supported: false
+  style: none
+  evidence: >-
+    No limit/offset/page/cursor parameter appears on any operation. Collection responses
+    (locations, rentroll, waitinglist, reviews, images) return the full set in one array with
+    no page metadata, so response size grows unbounded with facility size.
+
+filtering_and_expansion:
+  sparse_fieldsets: false
+  expansion: false
+  query_filters:
+  - operation: GET /v4/movein/{entity}/cost
+    parameters: [UnitId, InsuranceId, ExpectedMoveInDate, IsTaxExempt, TaxExemptNumber, OneMonthFreeDiscount]
+    note: The only operation in the contract that takes query parameters; they are quote inputs, not filters.
+
+request_tracing:
+  request_id_header: null
+  observed_response_headers:
+  - Request-Context (Azure Application Insights appId, e.g. cid-v1:<uuid>)
+  - Server-Timing (dtTrId / dtRpid — Dynatrace trace and request ids)
+  - X-WssApi-Environment (e.g. "Production")
+  - X-WssApi-Hostname (e.g. "api.webselfstorage.com")
+  - X-WssApi-Version (e.g. "1.0.0.0")
+  note: >-
+    There is no documented correlation id a client should quote to support. The Dynatrace
+    Server-Timing dtTrId value is the closest usable trace handle and is present on every
+    response, but it is emitted by the APM agent, not by the API contract.
+
+versioning:
+  style: uri-path
+  current: v4
+  supported: [v4, v3]
+  discovery: >-
+    https://api.webselfstorage.com/ renders a Swagger UI whose version selector offers
+    "WebSelfStorage.AffiliateAPI v4" (primary) and "WebSelfStorage.AffiliateAPI v3".
+  deprecation_signal: >-
+    Selecting v3 in the console renders an in-page banner reading "You are viewing an older
+    version of our API." with a "View the latest!" link. No Deprecation or Sunset response
+    header (RFC 8594) is emitted, and no dated end-of-life is published.
+  see_also: lifecycle/amerco-lifecycle.yml
+
+error_envelope:
+  shape: vendor
+  rfc9457: false
+  content_type_declared: application/json
+  content_type_observed_on_401: application/problem+json
+  discrepancy: >-
+    The production 401 is served with Content-Type application/problem+json but the body is an
+    ASP.NET ObjectResult envelope
+    ({"Value":{"Success":...,"ErrorMessage":...},"Formatters":[],"ContentTypes":[],"DeclaredType":null,"StatusCode":401}),
+    not an RFC 9457 problem document — it has no type, title, status, detail or instance member.
+    An agent that content-negotiates on problem+json will mis-parse this response.
+  documented_shape: >-
+    In-contract errors reuse the success envelope: every response schema carries
+    success (boolean) and errorMessage (string). 400s on the write paths return
+    InvalidParameterResult, which adds parameter and reason.
+  see_also: errors/amerco-problem-types.yml
+
+rate_limit_signaling:
+  documented: false
+  headers_observed: []
+  status_on_exhaustion: null
+  evidence: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header was present on the live 401 from
+    https://api.webselfstorage.com/v4/test, and no limits are published in the contract or on
+    webselfstorage.com.
+  see_also: rate-limits/amerco-rate-limits.yml
+
+test_affordances:
+  endpoints:
+  - path: /v4/test
+    summary: Simulates a success
+  - path: /v4/error
+    summary: Simulates an error
+  note: >-
+    Both are published operations on the production contract, useful for credential and
+    error-path smoke tests. They are not a sandbox: there is no separate test host, no test
+    key prefix, and no published test card numbers, so no sandbox/ artifact is written.
+
+dry_run_mode:
+  supported: partial
+  detail: >-
+    GET /v4/movein/{entity}/cost returns a full cost breakdown for a prospective move-in
+    without committing it, so a pricing agent can rehearse the money side of POST
+    /v4/movein/{entity}. There is no dry-run for the reservation or move-in commit itself.
+
+reversibility:
+  grade: na
+  applies_to: write operations
+  operations_reviewed:
+  - POST /v4/reservation/{entity}
+  - POST /v4/movein/{entity}
+  reversal_paths: []
+  window: null
+  evidence: >-
+    Neither published OpenAPI document contains any cancel, void, refund, reverse, undo,
+    rollback, restore or DELETE operation — the contract has no DELETE, PUT or PATCH method at
+    all. A reservation created through POST /v4/reservation/{entity} and a move-in committed
+    through POST /v4/movein/{entity} (which charges a card supplied in PaymentInfo) cannot be
+    reversed through the API; reversal, if it exists, happens in the WebSelfStorage web
+    application or through the affiliate's merchant services, neither of which publishes a
+    window.
+  grade_basis: >-
+    Graded `na` rather than `documented`: there is no reversal operation to grade, and no
+    published window. This is recorded as an honest absence, not a zero — the API HAS a write
+    surface, and that write surface is one-way, which is the finding an agent needs before it
+    acts.
+  recommendation: >-
+    Publish a cancel operation for reservations and a documented void/refund window for
+    move-in payments. Together with an idempotency key these are the two changes that would
+    make this API safe for an autonomous agent to call.
+
+data_sensitivity:
+  pii: true
+  cardholder_data: true
+  detail: >-
+    The PaymentInfo schema carries raw creditCard, expirationMMYY and csc fields, and Customer
+    and RentRoll carry full name, postal address and phone. Callers are inside PCI DSS scope.
+  see_also: conformance/amerco-conformance.yml
+
+cross_references:
+  authentication: authentication/amerco-authentication.yml
+  errors: errors/amerco-problem-types.yml
+  lifecycle: lifecycle/amerco-lifecycle.yml
+  rate_limits: rate-limits/amerco-rate-limits.yml
+  data_model: data-model/amerco-data-model.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

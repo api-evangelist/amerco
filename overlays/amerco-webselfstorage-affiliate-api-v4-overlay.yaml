@@ -1,0 +1,102 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — WebSelfStorage Affiliate API v4
+  version: 1.0.0
+extends: ../openapi/_original/amerco-webselfstorage-affiliate-api-v4-swagger.json
+x-provenance:
+  generated: '2026-09-02'
+  method: generated
+  source: >-
+    Enhancements API Evangelist derived from https://api.webselfstorage.com/swagger/v4/swagger.json
+    (HTTP 200, OpenAPI 3.0.1) plus live probes of https://api.webselfstorage.com on 2026-09-02.
+    Nothing here alters AMERCO's published contract; it records what we learned that the
+    contract omits. Every servers[] and response addition below was OBSERVED, not assumed.
+actions:
+- target: $
+  description: >-
+    Add the production server. The published document has no servers[] block at all, so a
+    generated client has no base URL. api.webselfstorage.com was confirmed live: GET /v4/test
+    returned HTTP 401 with X-WssApi-Hostname api.webselfstorage.com and
+    X-WssApi-Environment Production.
+  update:
+    servers:
+    - url: https://api.webselfstorage.com
+      description: Production
+- target: $.info
+  description: >-
+    Add description, contact and licence context the published info block omits (it carries only
+    title and version). Contact address taken verbatim from https://www.webselfstorage.com/.
+  update:
+    description: >-
+      The WebSelfStorage Affiliate API gives U-Haul Self-Storage Affiliate Network members
+      programmatic access to their own facilities: location profile, unit inventory and rates,
+      rent roll, waiting list, reviews, images, move-in availability and cost, plus reservation
+      and move-in commit. Every operation but /locations is scoped to a single `entity`
+      (facility) id, and every operation requires an affiliate access token.
+    contact:
+      name: U-Haul Self-Storage Affiliate Network
+      email: saleswss@uhaul.com
+      url: https://www.webselfstorage.com/PartnerWithUs
+    x-operator: eMove, Inc. d/b/a U-Haul Self-Storage Affiliate Network, a subsidiary of AMERCO (U-Haul Holding Company)
+- target: $.security
+  description: >-
+    Record a defect rather than silently fixing it: the document-level security requirement
+    names "Bearer", but components.securitySchemes declares the scheme under the key "apiKey".
+    No scheme named "Bearer" exists, so the requirement dangles and strict tooling drops the
+    security requirement entirely.
+  update:
+    x-api-evangelist-defect: >-
+      security[0] references an undefined scheme "Bearer"; the declared scheme key is "apiKey".
+- target: $.paths
+  description: >-
+    Record the observed 401. Not one of the 13 operations declares a 401 or 403 response, yet
+    every operation requires a key and the live host returns 401 with an ASP.NET ObjectResult
+    body served as application/problem+json.
+  update:
+    x-api-evangelist-observed-401:
+      status: 401
+      content_type: application/problem+json
+      body: >-
+        {"Value":{"Success":false,"ErrorMessage":"Unauthorized. Specify your API key in the
+        Authorization header."},"Formatters":[],"ContentTypes":[],"DeclaredType":null,"StatusCode":401}
+      probed: '2026-09-02'
+      probe_url: https://api.webselfstorage.com/v4/test
+      note: >-
+        The envelope is PascalCase and is NOT an RFC 9457 problem document despite the content
+        type. In-contract error bodies are camelCase (success / errorMessage).
+- target: $.paths['/v4/reservation/{entity}'].post
+  description: >-
+    Flag the irreversibility of the reservation write. There is no cancel, void or DELETE
+    anywhere in the contract, and no idempotency key, while the request body carries raw card
+    data.
+  update:
+    x-api-evangelist-consequence: irreversible-write
+    x-api-evangelist-reversal: none-published
+    x-api-evangelist-idempotency: none
+    x-api-evangelist-pci-scope: true
+- target: $.paths['/v4/movein/{entity}'].post
+  description: >-
+    Flag the irreversibility of the move-in commit — it creates a tenancy contract and charges
+    the card supplied in PaymentInfo, with no published refund or void path or window.
+  update:
+    x-api-evangelist-consequence: irreversible-write
+    x-api-evangelist-reversal: none-published
+    x-api-evangelist-idempotency: none
+    x-api-evangelist-pci-scope: true
+    x-api-evangelist-dry-run: GET /v4/movein/{entity}/cost prices the same move-in without committing it.
+- target: $.components.schemas.PaymentInfo
+  description: Mark the cardholder-data schema so downstream tooling can see PCI scope without reading field names.
+  update:
+    x-api-evangelist-sensitivity: cardholder-data
+    x-api-evangelist-fields: [creditCard, expirationMMYY, csc]
+    x-api-evangelist-alternative: >-
+      GET /v4/paymentPortalUrl/{entity} returns a hosted payment portal URL, which keeps the
+      integrator out of PCI scope for the payment leg.
+- target: $.components.schemas.RentRoll
+  update:
+    x-api-evangelist-sensitivity: pii
+    x-api-evangelist-fields: [customerName, customerPhoneNumber, address1, address2, apartment, city, stateName, zip]
+- target: $.components.schemas.WaitingListItemViewModel
+  update:
+    x-api-evangelist-sensitivity: pii
+    x-api-evangelist-fields: [personFirstName, personLastName, emailAddress, homePhone, mobilePhone, businessPhone, primaryAddress1, primaryCity, primaryState, primaryZip]
