@@ -31,6 +31,7 @@ accessModel:
   confidence: medium
   source:
   - plans
+  - {url: 'https://www.amerco.com/', status: 301, note: 'declared website redirects to https://investors.uhaul.com/overview/default.aspx — a different registrable domain (amerco.com -> uhaul.com), possible rename or acquisition (probed 2026-09-03, roadmap#169)'}
   generated: '2026-07-22'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/amerco.png
