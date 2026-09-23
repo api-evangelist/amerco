@@ -1,7 +1,9 @@
 ---
 title: Amerco Q1 Revenue Climbed, but Earnings Went Into Reverse ...
 url: https://www.fool.com/investing/2016/08/04/amerco-q1-revenue-climbed-but-earnings-went-into-r.aspx
-date: '2026-05-25'
+published: '2016-08-04'
+date_basis: url-derived
+harvested: '2026-05-25'
 query: '"Amerco" press release artificial intelligence'
 position: 4
 source: serpapi-google

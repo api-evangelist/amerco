@@ -1,7 +1,9 @@
 ---
 title: Amerco Inc. reports earnings for Qtr to Sept 30
 url: https://www.nytimes.com/1994/11/12/business/amerco-inc-reports-earnings-for-qtr-to-sept-30.html
-date: '2026-05-25'
+published: ''
+date_basis: harvested
+harvested: '2026-05-25'
 query: '"Amerco" press release artificial intelligence'
 position: 3
 source: serpapi-google

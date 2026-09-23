@@ -1,0 +1,29 @@
+{
+  "provider": "amerco",
+  "sources": [
+    "_original/amerco-webselfstorage-affiliate-api-v3-openapi.yml",
+    "_original/amerco-webselfstorage-affiliate-api-v4-openapi.yml"
+  ],
+  "outputs": [
+    "amerco-wssapi-api-openapi.yml",
+    "amerco-wssapiv4-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "2 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "amerco-webselfstorage-affiliate-api-v3-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "amerco-webselfstorage-affiliate-api-v3-openapi.yml: declared missing tag: WssApi",
+    "amerco-webselfstorage-affiliate-api-v4-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "amerco-webselfstorage-affiliate-api-v4-openapi.yml: declared missing tag: WssApiV4",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/amerco-webselfstorage-affiliate-api-v4-swagger.json: archived document superseded by a larger archived document",
+    "_original/amerco-webselfstorage-affiliate-api-v3-swagger.json: archived document superseded by a larger archived document",
+    "amerco-wssapi-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "amerco-wssapiv4-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

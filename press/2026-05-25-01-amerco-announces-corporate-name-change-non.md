@@ -1,7 +1,9 @@
 ---
 title: AMERCO Announces Corporate Name Change, Non ...
 url: https://www.prnewswire.com/news-releases/amerco-announces-corporate-name-change-non-voting-common-stock-dividend-and-other-actions-taken-by-the-boards-independent-special-committee-301657767.html
-date: '2026-05-25'
+published: ''
+date_basis: harvested
+harvested: '2026-05-25'
 query: '"Amerco" press release artificial intelligence'
 position: 1
 source: serpapi-google
