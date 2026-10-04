@@ -406,70 +406,360 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    LocationInformation:
+    Unit:
       type: object
       properties:
-        address:
-          $ref: '#/components/schemas/Address'
-        allowsReservations:
-          type: boolean
-        coupons:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Coupon'
-        facilityFeatures:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/FacilityFeature'
-        hoursOfOperation:
-          $ref: '#/components/schemas/HoursOfOperation'
-        locationFeatures:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/LocationFeature'
-        locationServices:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/LocationService'
-        name:
+        unitId:
+          type: string
+          format: uuid
+        unitNumber:
           type:
           - string
           - 'null'
-        phone:
+      additionalProperties: false
+    Address:
+      type: object
+      properties:
+        addressLine1:
           type:
           - string
           - 'null'
-        reservationDates:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        reservationNotBelowPercentage:
+        addressLine2:
           type:
           - string
           - 'null'
-        reservationNotBelowTotalUnits:
+        city:
           type:
           - string
           - 'null'
-        reviewFee:
+        country:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        destinationLatitude:
           type: number
           format: double
+        destinationLongitude:
+          type: number
+          format: double
+        destinationState:
+          type:
+          - string
+          - 'null'
+        formattedAddress:
+          type:
+          - string
+          - 'null'
+        location:
+          $ref: '#/components/schemas/LocationLatLong'
+        originLatitude:
+          type: number
+          format: double
+        originLongitude:
+          type: number
+          format: double
+        postalCode:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    UnitTypeImage:
+      type: object
+      properties:
+        description:
+          type:
+          - string
+          - 'null'
+        popupDescription:
+          type:
+          - string
+          - 'null'
+        popupTitle:
+          type:
+          - string
+          - 'null'
+        imageExists:
+          type: boolean
+        mainImage:
+          type:
+          - string
+          - 'null'
+        thumbImage:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    LocationReviewsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        reviews:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/WssRating'
+          description: Optional, present only when at least one entity is found without any errors!
+      additionalProperties: false
+    ReservationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        entity:
+          type: integer
+          format: int32
+        moveInDate:
+          type: string
+          format: date-time
+        totalCost:
+          type: number
+          format: double
+        reservationNumber:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    FacilityFeature:
+      type: object
+      properties:
+        description:
+          type:
+          - string
+          - 'null'
+        imageUrl:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    LocationsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        entities:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: Optional, present only when at least one entity is found without any errors!
+      additionalProperties: false
+    WssRating:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        customerName:
+          type:
+          - string
+          - 'null'
+        rating:
+          type: number
+          format: double
+        review:
+          type:
+          - string
+          - 'null'
+        reply:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    LocationLatLong:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+      additionalProperties: false
+    UnitFeature:
+      type: object
+      properties:
+        access:
+          type:
+          - string
+          - 'null'
+        climate:
+          type:
+          - string
+          - 'null'
+        doors:
+          type:
+          - string
+          - 'null'
+        elevation:
+          type:
+          - string
+          - 'null'
+        floor:
+          type:
+          - string
+          - 'null'
+        product:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    WeeklyHours:
+      type: object
+      properties:
+        friday:
+          $ref: '#/components/schemas/DayOfTheWeek'
+        monday:
+          $ref: '#/components/schemas/DayOfTheWeek'
+        saturday:
+          $ref: '#/components/schemas/DayOfTheWeek'
+        sunday:
+          $ref: '#/components/schemas/DayOfTheWeek'
+        thursday:
+          $ref: '#/components/schemas/DayOfTheWeek'
+        tuesday:
+          $ref: '#/components/schemas/DayOfTheWeek'
+        wednesday:
+          $ref: '#/components/schemas/DayOfTheWeek'
+      additionalProperties: false
+    Portable:
+      type: object
+      properties:
+        isPortable:
+          type: boolean
+        onSiteOnly:
+          type: boolean
+        waiveDeliveryFee:
+          type: boolean
+      additionalProperties: false
+    MoveInCostResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        costBreakDown:
+          $ref: '#/components/schemas/MoveInCostBreakDown'
+        totalCost:
+          type: number
+          format: double
+      additionalProperties: false
+    InsuranceCoverageTypesEnum:
+      enum:
+      - SafeStor
+      - HomeownersNoInformation
+      - Homeowners
+      - DeclineAllInsuranceOptions
+      type: string
+    InvalidParameterResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        parameter:
+          type:
+          - string
+          - 'null'
+        reason:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ServiceCharge:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+        description:
+          type:
+          - string
+          - 'null'
+        number:
+          type: integer
+          format: int32
+        quantity:
+          type: integer
+          format: int32
+        taxable:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ReservationRequest:
+      type: object
+      properties:
+        reservationDay:
+          type: string
+          description: Required - Will throw validation failure if absent!
+          format: date-time
         units:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/UnitType'
+            $ref: '#/components/schemas/UnitReservation'
+          description: Required - Must specify at least one unit!
+        paymentInfo:
+          $ref: '#/components/schemas/PaymentInfo'
+      additionalProperties: false
+    PaymentPortalUrlResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    DayOfTheWeek:
+      type: object
+      properties:
+        close:
+          type:
+          - string
+          - 'null'
+        isOpen:
+          type: boolean
+        open:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     PaymentInfo:
       type: object
@@ -534,81 +824,170 @@ components:
           - 'null'
           description: Required - Will throw validation failures if absent!
       additionalProperties: false
-    UnitType:
+    MoveInRequest:
       type: object
       properties:
-        bonusComments:
+        unitID:
+          type: string
+          format: uuid
+        insuranceId:
+          type: string
+          format: uuid
+        gatePassword:
           type:
           - string
           - 'null'
-        cubicFootage:
+        payAmount:
           type: number
           format: double
-        orderGrouping:
+        oneMonthFreeDiscount:
+          type: boolean
+        moveInDate:
+          type: string
+          format: date-time
+        isTaxExempt:
+          type: boolean
+        taxNumber:
           type:
           - string
           - 'null'
-        squareFootage:
+        saveCardForFutureUse:
+          type: boolean
+        enrollIntoAutopay:
+          type: boolean
+        paymentInfo:
+          $ref: '#/components/schemas/PaymentInfo'
+        alternatePhoneNumber:
+          type:
+          - string
+          - 'null'
+        alternateContact:
+          $ref: '#/components/schemas/Customer'
+      additionalProperties: false
+    RentRollResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        rentRoll:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/RentRoll'
+      additionalProperties: false
+    HoursOfOperation:
+      type: object
+      properties:
+        gate:
+          $ref: '#/components/schemas/WeeklyHours'
+        office:
+          $ref: '#/components/schemas/WeeklyHours'
+      additionalProperties: false
+    RentRoll:
+      type: object
+      properties:
+        address1:
+          type:
+          - string
+          - 'null'
+        address2:
+          type:
+          - string
+          - 'null'
+        apartment:
+          type:
+          - string
+          - 'null'
+        balance:
           type: number
           format: double
-        totalUnits:
+        city:
+          type:
+          - string
+          - 'null'
+        contractType:
+          type:
+          - string
+          - 'null'
+        contractUnitId:
+          type: string
+          format: uuid
+        customerName:
+          type:
+          - string
+          - 'null'
+        customerPhoneNumber:
+          type:
+          - string
+          - 'null'
+        dateMovedIn:
+          type: string
+          format: date-time
+        daysOccupied:
           type: integer
           format: int32
-        unitFeature:
-          $ref: '#/components/schemas/UnitFeature'
-        unitStorageGuide:
-          $ref: '#/components/schemas/UnitStorageGuide'
-        unitTypeImage:
-          $ref: '#/components/schemas/UnitTypeImage'
-        height:
+        insurance:
           type: number
           format: double
-        insuranceOptions:
+        paidThru:
+          type: string
+          format: date-time
+        roomNumber:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/InsuranceOption'
-        isCampusStorage:
+        stateName:
+          type:
+          - string
+          - 'null'
+        streetRate:
+          type: number
+          format: double
+        zip:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    LocationService:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+        description:
+          type:
+          - string
+          - 'null'
+        locationServiceNumber:
+          type:
+          - string
+          - 'null'
+        taxable:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    LocationImagesResponse:
+      type: object
+      properties:
+        success:
           type: boolean
-        length:
-          type: number
-          format: double
-        monthly:
-          type: number
-          format: double
-        portable:
-          $ref: '#/components/schemas/Portable'
-        serviceCharges:
+        errorMessage:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/ServiceCharge'
-        sizeDescriptionsField:
+        imageLinks:
           type:
           - array
           - 'null'
           items:
             type: string
-        unitId:
-          type: string
-          format: uuid
-        rentableObjectId:
-          type: string
-          format: uuid
-        unitSize:
-          type:
-          - string
-          - 'null'
-        vacantUnits:
-          type: integer
-          format: int32
-        width:
-          type: number
-          format: double
-        roomSizeReservationRules:
-          $ref: '#/components/schemas/RoomSizeReservationRules'
+          description: Optional, present only when at least one image is found without any errors!
       additionalProperties: false
     WaitingListItemViewModel:
       type: object
@@ -714,56 +1093,7 @@ components:
           type: string
           format: uuid
       additionalProperties: false
-    LocationService:
-      type: object
-      properties:
-        amount:
-          type: number
-          format: double
-        description:
-          type:
-          - string
-          - 'null'
-        locationServiceNumber:
-          type:
-          - string
-          - 'null'
-        taxable:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Portable:
-      type: object
-      properties:
-        isPortable:
-          type: boolean
-        onSiteOnly:
-          type: boolean
-        waiveDeliveryFee:
-          type: boolean
-      additionalProperties: false
-    UnitReservation:
-      type: object
-      properties:
-        unitID:
-          type: string
-          format: uuid
-        insuranceID:
-          type:
-          - string
-          - 'null'
-          format: uuid
-      additionalProperties: false
-    HoursOfOperation:
-      type: object
-      properties:
-        gate:
-          $ref: '#/components/schemas/WeeklyHours'
-        office:
-          $ref: '#/components/schemas/WeeklyHours'
-      additionalProperties: false
-    ReservationResponse:
+    WaitingListResponse:
       type: object
       properties:
         success:
@@ -772,31 +1102,12 @@ components:
           type:
           - string
           - 'null'
-        entity:
-          type: integer
-          format: int32
-        moveInDate:
-          type: string
-          format: date-time
-        totalCost:
-          type: number
-          format: double
-        reservationNumber:
+        waitingList:
           type:
-          - string
+          - array
           - 'null'
-      additionalProperties: false
-    UnitStorageGuide:
-      type: object
-      properties:
-        longDescription:
-          type:
-          - string
-          - 'null'
-        shortDescription:
-          type:
-          - string
-          - 'null'
+          items:
+            $ref: '#/components/schemas/WaitingListItemViewModel'
       additionalProperties: false
     LocationFeature:
       type: object
@@ -806,7 +1117,7 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    LocationReviewsResponse:
+    LocationResponse:
       type: object
       properties:
         success:
@@ -815,32 +1126,10 @@ components:
           type:
           - string
           - 'null'
-        reviews:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/WssRating'
-          description: Optional, present only when at least one entity is found without any errors!
+        location:
+          $ref: '#/components/schemas/LocationInformation'
       additionalProperties: false
-    ReservationRequest:
-      type: object
-      properties:
-        reservationDay:
-          type: string
-          description: Required - Will throw validation failure if absent!
-          format: date-time
-        units:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/UnitReservation'
-          description: Required - Must specify at least one unit!
-        paymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
-      additionalProperties: false
-    MoveInCostResponse:
+    AvailableUnitResponse:
       type: object
       properties:
         success:
@@ -849,11 +1138,12 @@ components:
           type:
           - string
           - 'null'
-        costBreakDown:
-          $ref: '#/components/schemas/MoveInCostBreakDown'
-        totalCost:
-          type: number
-          format: double
+        availableUnits:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SelfMoveInUnit'
       additionalProperties: false
     MoveInResponse:
       type: object
@@ -887,6 +1177,115 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    UnitType:
+      type: object
+      properties:
+        bonusComments:
+          type:
+          - string
+          - 'null'
+        cubicFootage:
+          type: number
+          format: double
+        orderGrouping:
+          type:
+          - string
+          - 'null'
+        squareFootage:
+          type: number
+          format: double
+        totalUnits:
+          type: integer
+          format: int32
+        unitFeature:
+          $ref: '#/components/schemas/UnitFeature'
+        unitStorageGuide:
+          $ref: '#/components/schemas/UnitStorageGuide'
+        unitTypeImage:
+          $ref: '#/components/schemas/UnitTypeImage'
+        height:
+          type: number
+          format: double
+        insuranceOptions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/InsuranceOption'
+        isCampusStorage:
+          type: boolean
+        length:
+          type: number
+          format: double
+        monthly:
+          type: number
+          format: double
+        portable:
+          $ref: '#/components/schemas/Portable'
+        serviceCharges:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ServiceCharge'
+        sizeDescriptionsField:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        unitId:
+          type: string
+          format: uuid
+        rentableObjectId:
+          type: string
+          format: uuid
+        unitSize:
+          type:
+          - string
+          - 'null'
+        vacantUnits:
+          type: integer
+          format: int32
+        width:
+          type: number
+          format: double
+        roomSizeReservationRules:
+          $ref: '#/components/schemas/RoomSizeReservationRules'
+      additionalProperties: false
+    InsuranceOption:
+      type: object
+      properties:
+        description:
+          type:
+          - string
+          - 'null'
+        due:
+          type: number
+          format: double
+        insuranceId:
+          type: string
+          format: uuid
+        monthlyRate:
+          type: number
+          format: double
+        percentage:
+          type: number
+          format: double
+        quantity:
+          type: integer
+          format: int32
+        selected:
+          type: boolean
+        tax:
+          type: number
+          format: double
+        total:
+          type: number
+          format: double
+        insuranceCoverageType:
+          $ref: '#/components/schemas/InsuranceCoverageTypesEnum'
+      additionalProperties: false
     Coupon:
       type: object
       properties:
@@ -899,128 +1298,42 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    UnitTypeImage:
-      type: object
-      properties:
-        description:
-          type:
-          - string
-          - 'null'
-        popupDescription:
-          type:
-          - string
-          - 'null'
-        popupTitle:
-          type:
-          - string
-          - 'null'
-        imageExists:
-          type: boolean
-        mainImage:
-          type:
-          - string
-          - 'null'
-        thumbImage:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    MoveInRequest:
+    UnitReservation:
       type: object
       properties:
         unitID:
           type: string
           format: uuid
-        insuranceId:
-          type: string
+        insuranceID:
+          type:
+          - string
+          - 'null'
           format: uuid
-        gatePassword:
-          type:
-          - string
-          - 'null'
-        payAmount:
-          type: number
-          format: double
-        oneMonthFreeDiscount:
-          type: boolean
-        moveInDate:
-          type: string
-          format: date-time
-        isTaxExempt:
-          type: boolean
-        taxNumber:
-          type:
-          - string
-          - 'null'
-        saveCardForFutureUse:
-          type: boolean
-        enrollIntoAutopay:
-          type: boolean
-        paymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
-        alternatePhoneNumber:
-          type:
-          - string
-          - 'null'
-        alternateContact:
-          $ref: '#/components/schemas/Customer'
       additionalProperties: false
-    RentRollResponse:
+    RoomSizeReservationRules:
       type: object
       properties:
-        success:
-          type: boolean
-        errorMessage:
+        reservationNotBelowPercentage:
           type:
-          - string
+          - integer
           - 'null'
-        rentRoll:
+          format: int32
+        reservationNotBelowTotalUnits:
           type:
-          - array
+          - integer
           - 'null'
-          items:
-            $ref: '#/components/schemas/RentRoll'
-      additionalProperties: false
-    LocationLatLong:
-      type: object
-      properties:
-        latitude:
-          type: number
-          format: double
-        longitude:
-          type: number
-          format: double
-      additionalProperties: false
-    LocationImagesResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        errorMessage:
+          format: int32
+        allowReservationsWhenOfficeClosed:
           type:
-          - string
+          - boolean
           - 'null'
-        imageLinks:
+        allowableReservationDates:
           type:
           - array
           - 'null'
           items:
             type: string
-          description: Optional, present only when at least one image is found without any errors!
-      additionalProperties: false
-    DayOfTheWeek:
-      type: object
-      properties:
-        close:
-          type:
-          - string
-          - 'null'
-        isOpen:
-          type: boolean
-        open:
-          type:
-          - string
-          - 'null'
+            format: date-time
       additionalProperties: false
     MoveInCostBreakDown:
       type: object
@@ -1064,345 +1377,6 @@ components:
         retailTax:
           type: number
           format: double
-      additionalProperties: false
-    Address:
-      type: object
-      properties:
-        addressLine1:
-          type:
-          - string
-          - 'null'
-        addressLine2:
-          type:
-          - string
-          - 'null'
-        city:
-          type:
-          - string
-          - 'null'
-        country:
-          type:
-          - string
-          - 'null'
-        county:
-          type:
-          - string
-          - 'null'
-        destinationLatitude:
-          type: number
-          format: double
-        destinationLongitude:
-          type: number
-          format: double
-        destinationState:
-          type:
-          - string
-          - 'null'
-        formattedAddress:
-          type:
-          - string
-          - 'null'
-        location:
-          $ref: '#/components/schemas/LocationLatLong'
-        originLatitude:
-          type: number
-          format: double
-        originLongitude:
-          type: number
-          format: double
-        postalCode:
-          type:
-          - string
-          - 'null'
-        state:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    AvailableUnitResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        errorMessage:
-          type:
-          - string
-          - 'null'
-        availableUnits:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/SelfMoveInUnit'
-      additionalProperties: false
-    WssRating:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date-time
-        customerName:
-          type:
-          - string
-          - 'null'
-        rating:
-          type: number
-          format: double
-        review:
-          type:
-          - string
-          - 'null'
-        reply:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Customer:
-      type: object
-      properties:
-        firstName:
-          type:
-          - string
-          - 'null'
-          description: Required - Will throw validation failures if absent!
-        lastName:
-          type:
-          - string
-          - 'null'
-          description: Required - Will throw validation failures if absent!
-        address1:
-          type:
-          - string
-          - 'null'
-          description: Required - Will throw validation failures if absent!
-        address2:
-          type:
-          - string
-          - 'null'
-          description: Required - Will throw validation failures if absent!
-        city:
-          type:
-          - string
-          - 'null'
-          description: Required - Will throw validation failures if absent!
-        state:
-          type:
-          - string
-          - 'null'
-          description: Required - Will throw validation failures if absent!
-        zip:
-          type:
-          - string
-          - 'null'
-          description: Required - Will throw validation failures if absent!
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Required - Will throw validation failures if absent!
-      additionalProperties: false
-    LocationsResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        errorMessage:
-          type:
-          - string
-          - 'null'
-        entities:
-          type:
-          - array
-          - 'null'
-          items:
-            type: integer
-            format: int32
-          description: Optional, present only when at least one entity is found without any errors!
-      additionalProperties: false
-    InsuranceCoverageTypesEnum:
-      enum:
-      - SafeStor
-      - HomeownersNoInformation
-      - Homeowners
-      - DeclineAllInsuranceOptions
-      type: string
-    ServiceCharge:
-      type: object
-      properties:
-        amount:
-          type: number
-          format: double
-        description:
-          type:
-          - string
-          - 'null'
-        number:
-          type: integer
-          format: int32
-        quantity:
-          type: integer
-          format: int32
-        taxable:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    WeeklyHours:
-      type: object
-      properties:
-        friday:
-          $ref: '#/components/schemas/DayOfTheWeek'
-        monday:
-          $ref: '#/components/schemas/DayOfTheWeek'
-        saturday:
-          $ref: '#/components/schemas/DayOfTheWeek'
-        sunday:
-          $ref: '#/components/schemas/DayOfTheWeek'
-        thursday:
-          $ref: '#/components/schemas/DayOfTheWeek'
-        tuesday:
-          $ref: '#/components/schemas/DayOfTheWeek'
-        wednesday:
-          $ref: '#/components/schemas/DayOfTheWeek'
-      additionalProperties: false
-    BaseResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        errorMessage:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Unit:
-      type: object
-      properties:
-        unitId:
-          type: string
-          format: uuid
-        unitNumber:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    RoomSizeReservationRules:
-      type: object
-      properties:
-        reservationNotBelowPercentage:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        reservationNotBelowTotalUnits:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        allowReservationsWhenOfficeClosed:
-          type:
-          - boolean
-          - 'null'
-        allowableReservationDates:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-            format: date-time
-      additionalProperties: false
-    WaitingListResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        errorMessage:
-          type:
-          - string
-          - 'null'
-        waitingList:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/WaitingListItemViewModel'
-      additionalProperties: false
-    RentRoll:
-      type: object
-      properties:
-        address1:
-          type:
-          - string
-          - 'null'
-        address2:
-          type:
-          - string
-          - 'null'
-        apartment:
-          type:
-          - string
-          - 'null'
-        balance:
-          type: number
-          format: double
-        city:
-          type:
-          - string
-          - 'null'
-        contractType:
-          type:
-          - string
-          - 'null'
-        contractUnitId:
-          type: string
-          format: uuid
-        customerName:
-          type:
-          - string
-          - 'null'
-        customerPhoneNumber:
-          type:
-          - string
-          - 'null'
-        dateMovedIn:
-          type: string
-          format: date-time
-        daysOccupied:
-          type: integer
-          format: int32
-        insurance:
-          type: number
-          format: double
-        paidThru:
-          type: string
-          format: date-time
-        roomNumber:
-          type:
-          - string
-          - 'null'
-        stateName:
-          type:
-          - string
-          - 'null'
-        streetRate:
-          type: number
-          format: double
-        zip:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    FacilityFeature:
-      type: object
-      properties:
-        description:
-          type:
-          - string
-          - 'null'
-        imageUrl:
-          type:
-          - string
-          - 'null'
       additionalProperties: false
     SelfMoveInUnit:
       type: object
@@ -1471,7 +1445,84 @@ components:
           items:
             $ref: '#/components/schemas/Unit'
       additionalProperties: false
-    LocationResponse:
+    LocationInformation:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+        allowsReservations:
+          type: boolean
+        coupons:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Coupon'
+        facilityFeatures:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FacilityFeature'
+        hoursOfOperation:
+          $ref: '#/components/schemas/HoursOfOperation'
+        locationFeatures:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LocationFeature'
+        locationServices:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LocationService'
+        name:
+          type:
+          - string
+          - 'null'
+        phone:
+          type:
+          - string
+          - 'null'
+        reservationDates:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        reservationNotBelowPercentage:
+          type:
+          - string
+          - 'null'
+        reservationNotBelowTotalUnits:
+          type:
+          - string
+          - 'null'
+        reviewFee:
+          type: number
+          format: double
+        units:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/UnitType'
+      additionalProperties: false
+    UnitStorageGuide:
+      type: object
+      properties:
+        longDescription:
+          type:
+          - string
+          - 'null'
+        shortDescription:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    BaseResponse:
       type: object
       properties:
         success:
@@ -1480,101 +1531,50 @@ components:
           type:
           - string
           - 'null'
-        location:
-          $ref: '#/components/schemas/LocationInformation'
       additionalProperties: false
-    InsuranceOption:
+    Customer:
       type: object
       properties:
-        description:
+        firstName:
           type:
           - string
           - 'null'
-        due:
-          type: number
-          format: double
-        insuranceId:
-          type: string
-          format: uuid
-        monthlyRate:
-          type: number
-          format: double
-        percentage:
-          type: number
-          format: double
-        quantity:
-          type: integer
-          format: int32
-        selected:
-          type: boolean
-        tax:
-          type: number
-          format: double
-        total:
-          type: number
-          format: double
-        insuranceCoverageType:
-          $ref: '#/components/schemas/InsuranceCoverageTypesEnum'
-      additionalProperties: false
-    UnitFeature:
-      type: object
-      properties:
-        access:
+          description: Required - Will throw validation failures if absent!
+        lastName:
           type:
           - string
           - 'null'
-        climate:
+          description: Required - Will throw validation failures if absent!
+        address1:
           type:
           - string
           - 'null'
-        doors:
+          description: Required - Will throw validation failures if absent!
+        address2:
           type:
           - string
           - 'null'
-        elevation:
+          description: Required - Will throw validation failures if absent!
+        city:
           type:
           - string
           - 'null'
-        floor:
+          description: Required - Will throw validation failures if absent!
+        state:
           type:
           - string
           - 'null'
-        product:
+          description: Required - Will throw validation failures if absent!
+        zip:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    InvalidParameterResult:
-      type: object
-      properties:
-        success:
-          type: boolean
-        errorMessage:
+          description: Required - Will throw validation failures if absent!
+        phone:
           type:
           - string
           - 'null'
-        parameter:
-          type:
-          - string
-          - 'null'
-        reason:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    PaymentPortalUrlResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        errorMessage:
-          type:
-          - string
-          - 'null'
-        url:
-          type:
-          - string
-          - 'null'
+          description: Required - Will throw validation failures if absent!
       additionalProperties: false
   securitySchemes:
     apiKey:
