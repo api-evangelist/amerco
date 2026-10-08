@@ -128,6 +128,10 @@ apis:
   - type: SignUp
     url: https://www.webselfstorage.com/SignUp
 common:
+- type: RateLimits
+  url: rate-limits/amerco-rate-limits.yml
+- type: FinOps
+  url: finops/amerco-finops.yml
 - type: Authentication
   url: authentication/amerco-authentication.yml
 - type: DomainSecurity
