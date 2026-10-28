@@ -1,4 +1,4 @@
-# AMERCO (amerco)
+# AMERCO
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,74 +64,127 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-AMERCO, operating as U-Haul Holding Company, is America's largest do-it-yourself moving and storage company. The company provides truck and trailer rentals, self-storage facilities, moving supplies, and portable moving and storage containers through its U-Haul brand. AMERCO operates the Moving Help marketplace, the U-Haul Self-Storage Affiliate Network, and WebSelfStorage management software.
+AMERCO, operating as U-Haul Holding Company, is America's largest do-it-yourself moving and storage company. The company provides truck and trailer rentals, self-storage facilities, moving supplies, and portable moving and storage containers through its U-Haul brand. AMERCO operates the Moving Help marketplace connecting consumers to moving service providers, the U-Haul Self-Storage Affiliate Network, and WebSelfStorage management software for independent storage facilities. It also operates AMERITAS Life Insurance and Oxford Life Insurance subsidiaries.
 
-**URL:** [https://www.amerco.com/](https://www.amerco.com/)
+**Areas:** Moving · Storage · Truck Rental · Logistics · Consumer Services · Fortune 1000 · Self Storage
 
-**Run:** [Capabilities Using Naftiko](https://github.com/naftiko/fleet?utm_source=api-evangelist&utm_medium=readme&utm_campaign=company-api-evangelist&utm_content=repo)
+## AMERCO on APIs.io
 
-## Tags
+Everything profiled for AMERCO is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/amerco/](https://apis.io/providers/amerco/)** — or go straight to one of the APIs or properties below.
 
- - Moving, Storage, Truck Rental, Logistics, Consumer Services
+### APIs (3)
 
-## Timestamps
+- [U-Haul](https://apis.io/apis/amerco/uhaul/) — U-Haul provides do-it-yourself moving and storage services including truck and trailer rentals, self-storage, moving supplies, and U-Box portable storage…
+- [AMERCO Wss API](https://apis.io/apis/amerco/amerco-wssapi-api/) — The WssApi API from AMERCO — 12 operation(s) for wssapi.
+- [AMERCO Wss API V4 API](https://apis.io/apis/amerco/amerco-wssapiv4-api/) — The WssApiV4 API from AMERCO — 12 operation(s) for wssapiv4.
 
-- **Created:** 2026-03-23
-- **Modified:** 2026-04-19
+### Published properties
 
-## APIs
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-### U-Haul
+#### MCP servers (1)
 
-U-Haul provides do-it-yourself moving and storage services including truck and trailer rentals, self-storage, moving supplies, and U-Box portable storage containers.
+Model Context Protocol servers that expose the API to agents.
 
-**Human URL:** [https://www.uhaul.com/](https://www.uhaul.com/)
+- [WebSelfStorage Affiliate API (candidate MCP server)](https://apis.io/servers/amerco/webselfstorage-affiliate-api-candidate-mcp-server/)
 
-#### Tags
+#### Overlays (1)
 
- - Moving, Storage, Truck Rental, Dealer Program
+OpenAPI overlays, including conversational phrasing for each operation.
 
-#### Properties
+- [Amerco Webselfstorage Affiliate Api V4 Overlay](https://apis.io/overlays/amerco/amerco-webselfstorage-affiliate-api-v4-overlay/)
 
-- [Documentation](https://www.uhaul.com/)
-- [Portal](https://www.uhaul.com/Dealer/)
+#### Security (2)
 
-## Common Properties
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Amerco Authentication](https://apis.io/security/amerco/amerco-authentication/)
+- [Amerco Domain Security](https://apis.io/security/amerco/amerco-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Amerco Plans Pricing](https://apis.io/plans/amerco/amerco-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Amerco Rate Limits](https://apis.io/rate-limits/amerco/amerco-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Amerco Finops](https://apis.io/finops/amerco/amerco-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.amerco.com/)
-- [Website](https://www.uhaul.com/)
-- [Portal](https://www.uhaul.com/Dealer/)
+- [Documentation](https://api.webselfstorage.com/)
+- [API reference](https://api.webselfstorage.com/)
+- [Sign up](https://www.webselfstorage.com/SignUp)
+- [Support](https://www.webselfstorage.com/ContactUs)
+- [Blog](https://www.uhaul.com/Blog/feed/)
+- [Terms of service](https://www.uhaul.com/Legal/TermsOfUse/)
+- [Privacy policy](https://www.uhaul.com/Legal/PrivacyPolicy/)
+- [GitHub](https://github.com/u-haul)
+- [Status](https://status.uhaul.com/)
 
-## Features
+## API Evangelist rating
 
-| Name | Description |
-|------|-------------|
-| Truck and Trailer Rental Network | Nationwide network of U-Haul trucks and trailers available through dealer locations with online booking and 24/7 customer support. |
-| Self-Storage Facilities | U-Haul owned and affiliate self-storage facilities with online reservation management and climate-controlled options. |
-| Moving Help Marketplace | Online marketplace connecting consumers to independent moving service providers for loading, unloading, packing, and cleaning services. |
-| U-Haul Self-Storage Affiliate Network | Partner network for independent self-storage facilities to list inventory and accept reservations through uhaul.com. |
-| WebSelfStorage Management Software | Self-storage management application providing reservation management, tenant tracking, payment processing, and reporting. |
-| U-Box Portable Storage | Portable moving and storage container service with pickup, transport, and delivery options. |
-| Dealer Program | No-investment dealer program for small businesses with 21% average commission and weekly direct deposit payments. |
+**Kin Score 49.5** — developing · rubric 0.25.0 · scored 2026-10-23
 
-## Use Cases
+| Facet | Score |
+|---|---|
+| Discoverability | 78.6 |
+| Contract quality | 46.1 |
+| Contract governance | 18.2 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 47.0 |
+| Access clarity | 73.7 |
 
-| Name | Description |
-|------|-------------|
-| Local and Long-Distance Moving | Individuals and families rent trucks and trailers for DIY residential and commercial moves. |
-| Self-Storage Management | Independent storage facility owners manage reservations and payments through WebSelfStorage software. |
-| Moving Service Provider Marketplace | Independent movers offer services through the Moving Help marketplace on uhaul.com. |
-| Dealer Business Revenue | Small businesses add U-Haul rental services to generate supplemental revenue with zero startup costs. |
+**Agent readiness 28.7** — agent-ready
 
-## Integrations
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
 
-| Name | Description |
-|------|-------------|
-| Moving Help Marketplace | Platform connecting consumers to independent moving service providers nationwide. |
-| AMERITAS Life Insurance | AMERCO subsidiary providing life insurance products. |
+**Regulatory alignment 29.4** — Horizontal (data, software, accessibility, platform)
 
-## Maintainers
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/amerco/](https://apis.io/providers/amerco/).
 
-**FN:** Kin Lane
+## How this profile is made
 
-**Email:** kin@apievangelist.com
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for AMERCO: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/amerco/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
