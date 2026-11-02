@@ -1,0 +1,118 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: AMERCO
+providerId: amerco
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://www.webselfstorage.com/Features (Support Services and Merchant Services sections),
+  https://www.webselfstorage.com/PartnerWithUs, https://www.webselfstorage.com/ and
+  https://api.webselfstorage.com/ — all read 2026-09-02
+created: '2026-05-04'
+modified: '2026-09-02'
+note: >-
+  REPLACES the 2026-05-04 bulk-sweep scaffold, which invented Free / Professional / Enterprise
+  API tiers with 1,000 / 100,000 / unlimited request quotas. AMERCO has never published any of
+  that. Removed.
+description: >-
+  AMERCO (U-Haul Holding Company) publishes NO pricing for API access. The WebSelfStorage
+  Affiliate API is a benefit of the U-Haul Self-Storage Affiliate Network relationship, not a
+  metered product: there are no request quotas, no tiers, no overage rate and no self-service
+  sign-up. What AMERCO does publish are flat monthly service fees for the WebSelfStorage
+  platform the API sits on, recorded below verbatim so a buyer can see the real commercial
+  shape.
+api_plan_count: 0
+api_pricing_published: false
+onboarding: >-
+  Become a U-Haul Self-Storage Affiliate via https://www.webselfstorage.com/PartnerWithUs or
+  saleswss@uhaul.com. There is no developer sign-up, no key self-issuance and no trial.
+plan_count: 4
+plans:
+- id: amerco-wss-contact-center-100
+  name: WebSelfStorage Contact Center — 100 units or less
+  type: paid
+  scope: WebSelfStorage platform service (not API access)
+  price: '175.00'
+  currency: USD
+  billingPeriod: month
+  description: >-
+    Flat monthly fee for the fully integrated U-Haul contact centre answering the affiliate's
+    calls 04:00–20:00, 7 days a week, 365 days a year, taking reservations, payments and
+    authorized move-ins against real-time inventory.
+  source: https://www.webselfstorage.com/Features
+  quote: '100 units or less — $175.00 per month'
+- id: amerco-wss-contact-center-101-250
+  name: WebSelfStorage Contact Center — 101 to 250 units
+  type: paid
+  scope: WebSelfStorage platform service (not API access)
+  price: '225.00'
+  currency: USD
+  billingPeriod: month
+  source: https://www.webselfstorage.com/Features
+  quote: '101 to 250 units — $225.00 per month'
+- id: amerco-wss-contact-center-251-500
+  name: WebSelfStorage Contact Center — 251 to 500 units
+  type: paid
+  scope: WebSelfStorage platform service (not API access)
+  price: '265.00'
+  currency: USD
+  billingPeriod: month
+  source: https://www.webselfstorage.com/Features
+  quote: '251 to 500 units — $265.00 per month'
+- id: amerco-wss-contact-center-501-plus
+  name: WebSelfStorage Contact Center — 501 or more units
+  type: paid
+  scope: WebSelfStorage platform service (not API access)
+  price: '325.00'
+  currency: USD
+  billingPeriod: month
+  source: https://www.webselfstorage.com/Features
+  quote: '501 or more — $325.00 per month'
+  terms: 'Rates are a flat monthly fee, there are no additional charges.'
+other_published_rates:
+- name: Integrated payment processing
+  value: 'from 1.29%'
+  unit: per transaction
+  terms: 'no hidden fees, no monthly statement fee, no third-party merchants'
+  source: https://www.webselfstorage.com/Features
+- name: U-Haul Dealer discount
+  value: '$10.00 off per month'
+  source: https://www.webselfstorage.com/
+- name: Customer online account portal
+  value: 'no extra charge'
+  source: https://www.webselfstorage.com/Features
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+x-canonical:
+  generated: '2026-11-01'
+  vocabulary: engine/economics/plans-canonical.yml
+  models:
+  - subscription
+  units: []
+  plans:
+  - name: WebSelfStorage Contact Center — 100 units or less
+    access: paid
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: WebSelfStorage Contact Center — 101 to 250 units
+    access: paid
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: WebSelfStorage Contact Center — 251 to 500 units
+    access: paid
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: WebSelfStorage Contact Center — 501 or more units
+    access: paid
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
